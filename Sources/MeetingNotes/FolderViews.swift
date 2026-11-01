@@ -1,4 +1,20 @@
 import SwiftUI
+import AppKit
+
+/// Native menus tint SF Symbols uniformly; preserve each swatch's own pixels instead.
+@MainActor
+enum FolderColorSwatch {
+    static func image(for color: FolderColor) -> NSImage {
+        let fill = NSColor(Palette.folderColors(for: color).foreground)
+        let image = NSImage(size: NSSize(width: 14, height: 14), flipped: false) { bounds in
+            fill.setFill()
+            NSBezierPath(ovalIn: bounds.insetBy(dx: 1, dy: 1)).fill()
+            return true
+        }
+        image.isTemplate = false
+        return image
+    }
+}
 
 struct FolderSidebar: View {
     @ObservedObject var store: MeetingStore
@@ -63,8 +79,9 @@ private struct FolderDropRow: View {
     @ViewState private var targeted = false
 
     private var folderColors: Palette.FolderColors? {
-        guard case .folder(let id) = scope else { return nil }
-        return Palette.folderColors(for: id)
+        guard case .folder(let id) = scope,
+              let folder = store.folders.first(where: { $0.id == id }) else { return nil }
+        return Palette.folderColors(for: folder)
     }
 
     var body: some View {
@@ -102,7 +119,9 @@ struct FolderEditor: View {
 
     init(store: MeetingStore, folder: MeetingFolder, creating: Bool, onSave: ((UUID) -> Void)? = nil) {
         self.store = store
-        _folder = ViewState(initialValue: folder)
+        var draft = folder
+        draft.color = draft.color ?? store.folderCatalog.nextColor
+        _folder = ViewState(initialValue: draft)
         self.creating = creating
         self.onSave = onSave
     }
@@ -121,12 +140,25 @@ struct FolderEditor: View {
                         ForEach(MeetingFolder.icons, id: \.self) { icon in
                             Button { folder.icon = icon } label: { Label(iconName(icon), systemImage: icon) }
                         }
-                    } label: { Image(systemName: folder.icon).font(.system(size: 20)).frame(width: 35, height: 35) }
-                        .menuStyle(.borderlessButton).frame(width: 42).help("Choose folder icon").accessibilityLabel("Choose folder icon")
+                    } label: {
+                        Image(systemName: folder.icon).font(.system(size: 20)).frame(width: 35, height: 35)
+                            .foregroundStyle(Palette.folderColors(for: folder).foreground)
+                    }
+                        .menuStyle(.borderlessButton).tint(Palette.folderColors(for: folder).foreground)
+                        .frame(width: 42).help("Choose folder icon").accessibilityLabel("Choose folder icon")
                     TextField("Name", text: $folder.name).textFieldStyle(.plain).font(.system(size: 16))
                 }.padding(9).background(Palette.sidebar).clipShape(RoundedRectangle(cornerRadius: 9))
                     .overlay(RoundedRectangle(cornerRadius: 9).stroke(Palette.line))
             }
+            Picker("Color", selection: Binding(get: { folder.color ?? .blue }, set: { folder.color = $0 })) {
+                ForEach(FolderColor.allCases, id: \.self) { color in
+                    Label {
+                        Text(color.name)
+                    } icon: {
+                        Image(nsImage: FolderColorSwatch.image(for: color)).renderingMode(.original)
+                    }.tag(color)
+                }
+            }.pickerStyle(.menu).tint(Palette.folderColors(for: folder).foreground).accessibilityLabel("Folder color")
             VStack(alignment: .leading, spacing: 10) {
                 Text("Description").font(.system(size: 13, weight: .medium))
                 ZStack(alignment: .topLeading) {

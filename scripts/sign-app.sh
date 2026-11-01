@@ -4,12 +4,13 @@ cd "${0:A:h:h}"
 umask 077
 app_path="${1:?Pass the app bundle to sign}"
 bundle_id="${2:-io.github.constipn.wallfly}"
-if [[ "$bundle_id" != io.github.constipn.wallfly && "$bundle_id" != io.github.constipn.wallfly.detector ]]; then
+if [[ "$bundle_id" != io.github.constipn.wallfly && "$bundle_id" != io.github.constipn.wallfly.detector && "$bundle_id" != io.github.constipn.wallfly.mcp ]]; then
     print -u2 'Unexpected signing identifier.'
     exit 1
 fi
 requirement_stem="requirements"
 if [[ "$bundle_id" == io.github.constipn.wallfly.detector ]]; then requirement_stem="detector-requirements"; fi
+if [[ "$bundle_id" == io.github.constipn.wallfly.mcp ]]; then requirement_stem="mcp-requirements"; fi
 sign_dir="${WALLFLY_SIGNING_DIR:-$PWD/.local-signing}"
 # Release builds must use an existing identity at an explicit absolute path, never a fresh one.
 if [[ -n "${WALLFLY_RELEASE:-}" ]]; then
@@ -83,6 +84,11 @@ subprocess.run(['csreq','-r','='+requirement,'-b',str(root/(sys.argv[3]+'.bin'))
 PY
 # File-based signing keeps the key out of the app and avoids modifying any keychain
 # or trust settings. No remote timestamp/account service is contacted.
+nested_settings=()
+if [[ "$bundle_id" == io.github.constipn.wallfly && -f "$app_path/Contents/MacOS/wallfly-mcp" ]]; then
+    nested_settings=(--binary-identifier "Contents/MacOS/wallfly-mcp:io.github.constipn.wallfly.mcp"
+        --code-requirements-file "Contents/MacOS/wallfly-mcp:$sign_dir/mcp-requirements.bin")
+fi
 "$signer" sign --config-file /dev/null --pem-source "$sign_dir/identity.crt" --pem-source "$sign_dir/identity.key" \
-    --timestamp-url none --shallow --code-requirements-file "$sign_dir/$requirement_stem.bin" "$app_path"
+    --timestamp-url none --binary-identifier "$bundle_id" --shallow --code-requirements-file "$sign_dir/$requirement_stem.bin" "${nested_settings[@]}" "$app_path"
 python3 scripts/verify-signature.py "$app_path" "$sign_dir/identity.crt" "$sign_dir/$requirement_stem.bin"

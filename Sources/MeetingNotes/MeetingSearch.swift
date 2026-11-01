@@ -1,4 +1,5 @@
 import Foundation
+import WallflyReadCore
 
 /// Search coordinates belong to the current source text, never to persisted meeting data.
 enum MeetingSearchSource: String, CaseIterable, Sendable {
@@ -45,30 +46,8 @@ struct MeetingSearchResult: Identifiable, Equatable, Sendable {
 }
 
 enum MeetingSearch {
-    static func terms(_ query: String) -> [String] {
-        Array(Set(query.split(whereSeparator: \.isWhitespace).map { String($0).lowercased() })).sorted()
-    }
-
-    static func ranges(in text: String, terms: [String]) -> [NSRange] {
-        let value = text as NSString
-        var found: [NSRange] = []
-        for term in terms where !term.isEmpty {
-            var start = 0
-            while start < value.length {
-                let range = value.range(of: term, options: [.caseInsensitive, .diacriticInsensitive], range: NSRange(location: start, length: value.length - start))
-                if range.location == NSNotFound { break }
-                found.append(range)
-                start = NSMaxRange(range)
-            }
-        }
-        var merged: [NSRange] = []
-        for range in found.sorted(by: { $0.location < $1.location }) {
-            if let last = merged.last, NSMaxRange(last) >= range.location {
-                merged[merged.count - 1] = NSUnionRange(last, range)
-            } else { merged.append(range) }
-        }
-        return merged
-    }
+    static func terms(_ query: String) -> [String] { TextSearch.terms(query) }
+    static func ranges(in text: String, terms: [String]) -> [NSRange] { TextSearch.ranges(in: text, terms: terms) }
 
     static func passages(_ meeting: Meeting) -> [SearchPassage] {
         MeetingSearchSource.allCases.flatMap { passages(meeting, source: $0) }
@@ -79,7 +58,7 @@ enum MeetingSearch {
         case .title:
             return [SearchPassage(id: "title", source: .title, text: meeting.title)]
         case .notes, .enhanced:
-            return (source == .notes ? meeting.notes : meeting.enhancedNotes).components(separatedBy: "\n").enumerated().compactMap { index, line in
+            return (source == .notes ? meeting.notes : meeting.displayedEnhancedNotes).components(separatedBy: "\n").enumerated().compactMap { index, line in
                 guard !line.trimmingCharacters(in: .whitespaces).isEmpty else { return nil }
                 return SearchPassage(id: "\(source.rawValue)-\(index)", source: source, text: line)
             }

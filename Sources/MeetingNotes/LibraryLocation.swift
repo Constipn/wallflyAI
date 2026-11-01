@@ -1,7 +1,7 @@
 import Foundation
 
 /// The location pointer lives outside the movable library. Credentials remain in Keychain;
-/// the login helper's Detection directory stays at its fixed Application Support location.
+/// the login helper's Detection directory stays in Application Support (`AppDataFolder`).
 enum LibraryLocation {
     static let key = "meetingLibraryPath"
     static var selected: URL? {
@@ -32,7 +32,7 @@ struct LibraryMigration {
         let target = destinationURL.resolvingSymlinksInPath().standardizedFileURL
         guard target != old, !target.path.hasPrefix(old.path + "/"),
               !old.path.hasPrefix(target.path + "/"), !fm.fileExists(atPath: target.path) else {
-            throw MeetingError.message("Choose a different folder without an existing MeetingNotes library. Existing files are not overwritten.")
+            throw MeetingError.message("Choose a different folder without an existing Wallfly library. Existing files are not overwritten.")
         }
         let names = try fm.contentsOfDirectory(atPath: old.path).filter { $0 != "Detection" }
         let destination = MeetingRepository(root: target)
@@ -44,7 +44,7 @@ struct LibraryMigration {
             var meetings = try destination.load()
             for index in meetings.indices {
                 func rebase(_ path: String) -> String {
-                    let url = URL(fileURLWithPath: path).standardizedFileURL
+                    let url = URL(fileURLWithPath: source.currentAudioPath(path)).standardizedFileURL
                     let prefix = source.root.standardizedFileURL.path + "/Audio/"
                     guard url.path.hasPrefix(prefix) else { return path }
                     return target.appendingPathComponent("Audio/" + url.path.dropFirst(prefix.count)).path

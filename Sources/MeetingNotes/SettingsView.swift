@@ -2,7 +2,7 @@ import SwiftUI
 import AppKit
 
 enum MeetingSettingsCategory: String, CaseIterable {
-    case recording = "Recording", intelligence = "AI & language", storage = "Storage"
+    case recording = "Recording", intelligence = "AI & language", storage = "Storage", mcp = "MCP"
 }
 
 struct MeetingSettingsView: View {
@@ -39,6 +39,8 @@ struct MeetingSettingsView: View {
                     TranscriptionSection(store: store)
                     SummarySection(store: store)
                     TaskOwnerSection(store: store)
+                case .mcp:
+                    MCPSettingsSection()
                 case .storage:
                     StorageLocationSection(store: store)
                     AudioRetentionSection(store: store)

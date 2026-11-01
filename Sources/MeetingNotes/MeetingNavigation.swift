@@ -22,7 +22,7 @@ struct MeetingFolderPicker: View {
     }
 
     private var folderColors: Palette.FolderColors? {
-        assigned.map { Palette.folderColors(for: $0.id) }
+        assigned.map { Palette.folderColors(for: $0) }
     }
 
     var body: some View {
@@ -67,7 +67,7 @@ struct MeetingFolderPicker: View {
         } label: {
             HStack {
                 Label(name, systemImage: icon).lineLimit(1)
-                    .foregroundStyle(id.map { Palette.folderColors(for: $0).foreground } ?? Palette.ink)
+                    .foregroundStyle(store.folders.first(where: { $0.id == id }).map { Palette.folderColors(for: $0).foreground } ?? Palette.ink)
                 Spacer()
                 if store.folderCatalog.folderID(for: meetingID) == id { Image(systemName: "checkmark") }
             }.padding(.vertical, 7).contentShape(Rectangle())

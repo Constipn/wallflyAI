@@ -38,6 +38,8 @@ struct Meeting: Identifiable, Codable, Equatable {
     var duration: TimeInterval = 0
     var notes: String = ""
     var enhancedNotes: String = ""
+    /// Older notes may still contain [mm:ss] citations; they are hidden in views, search and export.
+    var displayedEnhancedNotes: String { NotesEnhancer.removingTimestampCitations(enhancedNotes) }
     var enhancementEngine: String = ""
     var transcript: [TranscriptSegment] = []
     var audioFiles: [String] = []
@@ -124,7 +126,7 @@ struct Meeting: Identifiable, Codable, Equatable {
             "- \(Self.timestamp($0.start)) · \($0.speaker.rawValue) · \(String(format: "%.2f", $0.duration)) s: \($0.reason)"
         }
         let warning = gaps.isEmpty ? "" : "\n## Transcription gaps / unconfirmed audio\n\n" + gaps.joined(separator: "\n") + "\n"
-        return "# \(title)\n\n\(createdAt.formatted()) · \(Self.timestamp(duration))\n\n## My notes\n\n\(notes)\n\n## Enhanced notes\n\n\(enhancedNotes)\n\n## Transcript\n\n\(conversationText)\n" + warning
+        return "# \(title)\n\n\(createdAt.formatted()) · \(Self.timestamp(duration))\n\n## My notes\n\n\(notes)\n\n## Enhanced notes\n\n\(displayedEnhancedNotes)\n\n## Transcript\n\n\(conversationText)\n" + warning
     }
 }
 

@@ -4,10 +4,27 @@ import Security
 struct MeetingRepository {
     let root: URL
     private let requiresExistingRoot: Bool
-    init(root: URL? = nil, requiresExistingRoot: Bool = false) {
+    /// Folder the library had before the data-folder rename; audio paths saved under it are read under `root`.
+    let legacyRoot: URL?
+    init(root: URL? = nil, requiresExistingRoot: Bool = false, legacyRoot: URL? = nil) {
         self.requiresExistingRoot = requiresExistingRoot || (root == nil && LibraryLocation.selected != nil)
-        self.root = root ?? LibraryLocation.selected ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("MeetingNotes", isDirectory: true)
+        if let root = root ?? LibraryLocation.selected {
+            self.root = root
+            self.legacyRoot = legacyRoot
+        } else {
+            let root = DataFolderStartup.defaultLibraryRoot
+            self.root = root
+            self.legacyRoot = legacyRoot ?? DataFolderStartup.legacyRoot(for: root)
+        }
+    }
+    /// Maps an audio path saved before the data-folder rename to the same file under `root`.
+    /// A file that still exists at its saved path keeps that path.
+    func currentAudioPath(_ path: String) -> String {
+        guard let legacyRoot else { return path }
+        let prefix = legacyRoot.standardizedFileURL.path + "/Audio/"
+        let url = URL(fileURLWithPath: path).standardizedFileURL
+        guard url.path.hasPrefix(prefix), !FileManager.default.fileExists(atPath: url.path) else { return path }
+        return root.appendingPathComponent("Audio/" + url.path.dropFirst(prefix.count)).path
     }
     func prepare() throws {
         if requiresExistingRoot && !FileManager.default.fileExists(atPath: root.path) {
@@ -19,7 +36,20 @@ struct MeetingRepository {
         try prepare()
         return try FileManager.default.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)
             .filter { $0.pathExtension == "json" && $0.lastPathComponent != "settings.json" }
-            .map { try JSONDecoder().decode(Meeting.self, from: Data(contentsOf: $0)) }
+            .map { url -> Meeting in
+                var meeting = try JSONDecoder().decode(Meeting.self, from: Data(contentsOf: url))
+                if legacyRoot != nil {
+                    let files = meeting.audioFiles.map(currentAudioPath)
+                    let pending = meeting.audioDeletionPending?.map(currentAudioPath)
+                    if files != meeting.audioFiles || pending != meeting.audioDeletionPending {
+                        meeting.audioFiles = files
+                        meeting.audioDeletionPending = pending
+                        // Persist the rebased paths once; a failed write must not break loading.
+                        try? save(meeting)
+                    }
+                }
+                return meeting
+            }
             .sorted { $0.createdAt > $1.createdAt }
     }
     func save(_ meeting: Meeting) throws {

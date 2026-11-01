@@ -6,6 +6,10 @@ import TeamsDetectionKit
 struct MeetingNotesApp: App {
     @StateObject private var store = MeetingStore()
     @NSApplicationDelegateAdaptor(MeetingAppDelegate.self) private var appDelegate
+    init() {
+        // Rename the legacy data folder before the store or the detection service touch it.
+        DataFolderStartup.prepare()
+    }
     var body: some Scene {
         Window("Wallfly", id: "main") {
             MeetingWorkspace(store: store)

@@ -80,15 +80,23 @@ enum Palette {
         let background: Color
     }
 
-    private static let folderPalette = [
-        FolderColors(foreground: color(0x1D5AA6), background: color(0xDAE9FB)),
-        FolderColors(foreground: color(0x146A59), background: color(0xD6EEE5)),
-        FolderColors(foreground: color(0x6940A4), background: color(0xE9DDFA))
-    ]
+    static func folderColors(for folder: MeetingFolder) -> FolderColors {
+        folderColors(for: folder.color ?? .blue)
+    }
 
-    /// Stable across renaming, reordering and relaunches, without changing saved folder data.
-    static func folderColors(for id: UUID) -> FolderColors {
-        folderPalette[Int(id.uuid.0) % folderPalette.count]
+    static func folderColors(for folderColor: FolderColor) -> FolderColors {
+        switch folderColor {
+        case .blue: FolderColors(foreground: color(0x1D5AA6), background: color(0xDAE9FB))
+        case .green: FolderColors(foreground: color(0x356851), background: color(0xE0EDDA))
+        case .purple: FolderColors(foreground: color(0x6940A4), background: color(0xE9DDFA))
+        case .orange: FolderColors(foreground: color(0x934B12), background: color(0xFCE6CF))
+        case .pink: FolderColors(foreground: color(0x9B3563), background: color(0xF8DEEA))
+        case .teal: FolderColors(foreground: color(0x146A70), background: color(0xD5EEF0))
+        case .red: FolderColors(foreground: color(0xA12C32), background: color(0xFADDDD))
+        case .yellow: FolderColors(foreground: color(0x7A610C), background: color(0xFAF0C8))
+        case .brown: FolderColors(foreground: color(0x795039), background: color(0xEEDFD4))
+        case .gray: FolderColors(foreground: color(0x555D68), background: color(0xE5E8EC))
+        }
     }
 
     private static func color(_ hex: UInt32) -> Color {

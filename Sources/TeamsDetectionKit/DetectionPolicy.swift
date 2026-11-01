@@ -80,10 +80,14 @@ public struct DetectionStatus: Codable {
 
 /// Separate subdirectory: the existing meeting loader treats root-level JSON as meetings.
 public struct DetectionStorage {
-    public let root: URL
+    private let fixedRoot: URL?
+    /// Without an explicit root this is resolved on every access, so a running process
+    /// follows the one-time rename of the data folder (see `AppDataFolder`).
+    public var root: URL {
+        fixedRoot ?? AppDataFolder.resolve().appendingPathComponent("Detection", isDirectory: true)
+    }
     public init(root: URL? = nil) {
-        self.root = root ?? FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("MeetingNotes/Detection", isDirectory: true)
+        fixedRoot = root
     }
     public func read<T: Decodable>(_ name: String, as type: T.Type) -> T? {
         guard let data = try? Data(contentsOf: root.appendingPathComponent(name)) else { return nil }

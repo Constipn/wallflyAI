@@ -88,6 +88,18 @@ final class MeetingDetectionService: ObservableObject {
                     self.error = "The previous background helper could not be stopped."; return
                 }
             }
+            // A helper from before the rename would run next to the new one and show duplicate popups.
+            let legacy = NSRunningApplication.runningApplications(withBundleIdentifier: DataFolderStartup.legacyDetectorBundleID)
+            if !legacy.isEmpty {
+                for process in legacy { process.terminate() }
+                let deadline = ProcessInfo.processInfo.systemUptime + 5
+                while legacy.contains(where: { !$0.isTerminated }), ProcessInfo.processInfo.systemUptime < deadline {
+                    try? await Task.sleep(for: .milliseconds(100))
+                }
+                guard legacy.allSatisfy(\.isTerminated) else {
+                    self.error = "The previous background helper could not be stopped."; return
+                }
+            }
             let configuration = NSWorkspace.OpenConfiguration()
             configuration.activates = false
             do { _ = try await NSWorkspace.shared.openApplication(at: helper, configuration: configuration) }

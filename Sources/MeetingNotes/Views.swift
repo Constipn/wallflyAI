@@ -430,7 +430,7 @@ struct MeetingWorkspace: View {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 14) {
                             enhancementSetupNotice
-                            markdown(meeting.enhancedNotes)
+                            markdown(meeting.displayedEnhancedNotes)
                             Text("Enhanced with \(meeting.enhancementEngine)").font(.system(size: 12)).foregroundStyle(Palette.muted).padding(.top, 20)
                             Button("Enhance again") { Task { await store.enhanceNotes(meetingID: meeting.id) } }.font(.system(size: 12)).disabled(busy || store.enhancementConfigurationIssue != nil)
                         }.frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 25)

@@ -29,9 +29,9 @@ struct FolderBadge: View {
     let folder: MeetingFolder
     var body: some View {
         Label(folder.name, systemImage: folder.icon)
-            .font(Design.metadata).foregroundStyle(Palette.folderColors(for: folder.id).foreground).lineLimit(1)
+            .font(Design.metadata).foregroundStyle(Palette.folderColors(for: folder).foreground).lineLimit(1)
             .padding(.horizontal, 7).padding(.vertical, 3)
-            .background(Palette.folderColors(for: folder.id).background).clipShape(RoundedRectangle(cornerRadius: 5))
+            .background(Palette.folderColors(for: folder).background).clipShape(RoundedRectangle(cornerRadius: 5))
             .help(folder.name)
     }
 }

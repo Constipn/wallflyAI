@@ -16,9 +16,10 @@ import tempfile
 
 def verify(bundle, certificate, requirement):
     bundle, certificate, requirement = map(Path, (bundle, certificate, requirement))
-    info_bytes = (bundle / 'Contents/Info.plist').read_bytes()
-    info = plistlib.loads(info_bytes)
-    executable = bundle / 'Contents/MacOS' / info['CFBundleExecutable']
+    standalone = bundle.is_file()
+    info_bytes = b'' if standalone else (bundle / 'Contents/Info.plist').read_bytes()
+    info = {'CFBundleIdentifier': 'io.github.constipn.wallfly.mcp'} if standalone else plistlib.loads(info_bytes)
+    executable = bundle if standalone else bundle / 'Contents/MacOS' / info['CFBundleExecutable']
     binary = executable.read_bytes()
     assert binary[:4] == b'\xcf\xfa\xed\xfe', 'Expected thin little-endian Mach-O 64'
     ncmds = struct.unpack_from('<I', binary, 16)[0]
@@ -50,7 +51,7 @@ def verify(bundle, certificate, requirement):
     assert hash_type == 2 and hash_size == 32, 'Expected SHA-256 code directory'
     assert not flags & 2, 'Ad-hoc signatures are not stable signing identities'
     identifier = directory[ident_offset:].split(b'\0', 1)[0].decode()
-    assert identifier in ['io.github.constipn.wallfly', 'io.github.constipn.wallfly.detector'], 'Wrong bundle signing identifier'
+    assert identifier in ['io.github.constipn.wallfly', 'io.github.constipn.wallfly.detector', 'io.github.constipn.wallfly.mcp'], 'Wrong bundle signing identifier'
     assert info['CFBundleIdentifier'] == identifier, 'Bundle identifier mismatch'
     if code_limit == 0xffffffff and version >= 0x20300:
         code_limit = struct.unpack_from('>Q', directory, 56)[0]
@@ -62,14 +63,15 @@ def verify(bundle, certificate, requirement):
         assert hashlib.sha256(page).digest() == expected, 'Executable page hash mismatch'
 
     resources_path = bundle / 'Contents/_CodeSignature/CodeResources'
-    resources_bytes = resources_path.read_bytes()
-    for kind, content in [(1, info_bytes), (2, slots[2]), (3, resources_bytes)]:
+    resources_bytes = b'' if standalone else resources_path.read_bytes()
+    special = [(2, slots[2])] if standalone else [(1, info_bytes), (2, slots[2]), (3, resources_bytes)]
+    for kind, content in special:
         assert kind <= special_count
         expected = directory[hash_offset - kind * hash_size:hash_offset - (kind - 1) * hash_size]
         assert hashlib.sha256(content).digest() == expected, 'Signature metadata hash mismatch'
     requirements = blobs(slots[2], 0xfade0c01)
     assert requirements[3] == requirement.read_bytes(), 'Wrong designated requirement'
-    resources = plistlib.loads(resources_bytes)
+    resources = {} if standalone else plistlib.loads(resources_bytes)
     for relative, record in resources.get('files2', {}).items():
         path = bundle / 'Contents' / relative
         assert '..' not in Path(relative).parts, 'Invalid resource path'
@@ -80,8 +82,8 @@ def verify(bundle, certificate, requirement):
         elif 'cdhash' in record:
             assert identifier == 'io.github.constipn.wallfly', 'Unexpected nested code'
             assert relative in ['Library/LoginItems/Wallfly Detector.app',
-                                'Library/LoginItems/Meeting Notes Detector.app'], 'Unexpected helper path'
-            child_hash = verify(path, certificate, requirement.parent / 'detector-requirements.bin')
+                                'Library/LoginItems/Meeting Notes Detector.app', 'MacOS/wallfly-mcp'], 'Unexpected helper path'
+            child_hash = verify(path, certificate, requirement.parent / ('mcp-requirements.bin' if relative == 'MacOS/wallfly-mcp' else 'detector-requirements.bin'))
             assert child_hash == record['cdhash'], 'Nested helper code hash mismatch'
         else:
             raise AssertionError('Unsupported resource record')

@@ -7,10 +7,23 @@ export SWIFT_MODULECACHE_PATH="$PWD/.build/ModuleCache"
 # The outer Codex/macOS sandbox remains in force; SwiftPM's nested manifest sandbox
 # cannot initialize inside it. All build caches remain in the project directory.
 swift build --disable-sandbox --build-system native --configuration release --cache-path .build/cache --config-path .build/config --security-path .build/security -Xswiftc -module-cache-path -Xswiftc "$CLANG_MODULE_CACHE_PATH"
-app="$PWD/.build/Wallfly-stage-$(uuidgen).app"
+# Keep temporary app bundles out of Spotlight/app discovery, including on failed builds.
+stage_dir=$(mktemp -d "$PWD/.build/Wallfly-stage-XXXXXXXX.noindex")
+app="$stage_dir/Wallfly.app"
+cleanup_stage() { [[ ! -d "$stage_dir" ]] || /bin/rm -rf -- "$stage_dir"; }
+trap cleanup_stage EXIT
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
 cp .build/release/MeetingNotes "$app/Contents/MacOS/MeetingNotes"
+cp .build/release/wallfly-mcp "$app/Contents/MacOS/wallfly-mcp"
+./scripts/sign-app.sh "$app/Contents/MacOS/wallfly-mcp" io.github.constipn.wallfly.mcp
 mkdir -p "$app/Contents/Resources/Licenses"
+for dependency in swift-sdk swift-log swift-system eventsource; do
+    license=".build/checkouts/$dependency/LICENSE"
+    if [[ ! -f "$license" ]]; then
+        if [[ -f "$license.txt" ]]; then license="$license.txt"; else license="$license.md"; fi
+    fi
+    cp "$license" "$app/Contents/Resources/Licenses/$dependency.txt"
+done
 cp Sources/WebRTCAEC/LICENSE "$app/Contents/Resources/Licenses/WebRTC-AEC3.txt"
 cp Sources/WebRTCAEC/JSONCPP-LICENSE "$app/Contents/Resources/Licenses/JsonCpp.txt"
 cp Sources/WebRTCAEC/PROVENANCE.md "$app/Contents/Resources/Licenses/WebRTC-AEC3-Provenance.md"
@@ -59,7 +72,7 @@ app=pathlib.Path(sys.argv[1])
 info={
  'CFBundleName':'Wallfly','CFBundleDisplayName':'Wallfly',
  'CFBundleIdentifier':'io.github.constipn.wallfly','CFBundleExecutable':'MeetingNotes',
- 'CFBundlePackageType':'APPL','CFBundleDevelopmentRegion':'en','CFBundleLocalizations':['en'],'CFBundleShortVersionString':'1.13.0','CFBundleVersion':'31',
+ 'CFBundlePackageType':'APPL','CFBundleDevelopmentRegion':'en','CFBundleLocalizations':['en'],'CFBundleShortVersionString':'1.14.0','CFBundleVersion':'32',
  'CFBundleIconFile':'MeetingNotes.icns',
  'LSMinimumSystemVersion':'26.0','NSHighResolutionCapable':True,
  'LSApplicationCategoryType':'public.app-category.productivity',
@@ -99,12 +112,17 @@ cp "$app/Contents/Resources/MeetingNotes.icns" "$helper/Contents/Resources/Meeti
 ./scripts/sign-app.sh "$app"
 mkdir -p "$PWD/dist"
 final_app="$PWD/dist/Wallfly.app"
+# Keep one compressed rollback copy instead of accumulating discoverable app bundles.
+# Archive first: a failed archive leaves the current app intact.
 if [[ -d "$final_app" ]]; then
-    mv "$final_app" "$PWD/.build/Wallfly-previous-$(uuidgen).bundle-backup"
+    ditto -c -k --keepParent "$final_app" "$stage_dir/Wallfly-previous.zip"
+    mv -f "$stage_dir/Wallfly-previous.zip" "$PWD/.build/Wallfly-previous.zip"
+    mv "$final_app" "$stage_dir/previous.app"
 fi
 mv "$app" "$final_app"
-# Retain the previous name as a backup while leaving one current app in dist.
 if [[ -d "$PWD/dist/Meeting Notes.app" ]]; then
-    mv "$PWD/dist/Meeting Notes.app" "$PWD/.build/Meeting Notes-previous-$(uuidgen).bundle-backup"
+    ditto -c -k --keepParent "$PWD/dist/Meeting Notes.app" "$stage_dir/Meeting Notes-previous.zip"
+    mv -f "$stage_dir/Meeting Notes-previous.zip" "$PWD/.build/Meeting Notes-previous.zip"
+    mv "$PWD/dist/Meeting Notes.app" "$stage_dir/legacy.app"
 fi
 print "Built: $final_app"

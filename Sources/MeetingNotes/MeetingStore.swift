@@ -206,7 +206,13 @@ final class MeetingStore: ObservableObject {
             try repository.saveSettings(settings)
             selectedID = meetings.first?.id
         } catch { errorMessage = "Saved meetings could not be loaded: \(error.localizedDescription). The files are kept." }
-        do { folderCatalog = try repository.loadFolderCatalog() }
+        do {
+            let saved = try repository.loadFolderCatalog()
+            var updated = saved
+            updated.assignMissingColors()
+            if updated != saved { try repository.saveFolderCatalog(updated) }
+            folderCatalog = updated
+        }
         catch {
             folderLibraryAvailable = false
             errorMessage = "Folders could not be loaded: \(error.localizedDescription). Meetings and the folder file are kept."
@@ -317,8 +323,13 @@ final class MeetingStore: ObservableObject {
         guard !folder.name.isEmpty else { return false }
         if !MeetingFolder.icons.contains(folder.icon) { folder.icon = "folder.fill" }
         var updated = folderCatalog
-        if let index = updated.folders.firstIndex(where: { $0.id == folder.id }) { updated.folders[index] = folder }
-        else { updated.folders.append(folder) }
+        if let index = updated.folders.firstIndex(where: { $0.id == folder.id }) {
+            folder.color = folder.color ?? updated.folders[index].color ?? updated.nextColor
+            updated.folders[index] = folder
+        } else {
+            folder.color = folder.color ?? updated.nextColor
+            updated.folders.append(folder)
+        }
         return commitFolderCatalog(updated)
     }
     func moveMeeting(_ id: UUID, to folderID: UUID?) {
@@ -1577,9 +1588,9 @@ final class MeetingStore: ObservableObject {
         panel.canChooseFiles = false; panel.canChooseDirectories = true; panel.allowsMultipleSelection = false
         panel.canCreateDirectories = true
         panel.prompt = "Move library here"
-        panel.message = "MeetingNotes will be created in the chosen folder. Your existing library will be moved there."
+        panel.message = "A Wallfly folder will be created in the chosen folder. Your existing library will be moved there."
         guard panel.runModal() == .OK, let parent = panel.url else { return }
-        Task { await moveLibrary(to: parent.appendingPathComponent("MeetingNotes", isDirectory: true)) }
+        Task { await moveLibrary(to: parent.appendingPathComponent(AppDataFolder.name, isDirectory: true)) }
     }
 
     func moveLibrary(to destination: URL, remember: @escaping (URL) throws -> Void = LibraryLocation.remember) async {
