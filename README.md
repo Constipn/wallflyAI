@@ -70,7 +70,7 @@ Cloud providers require API keys. A ChatGPT or Claude subscription does not incl
 2. The app is not notarized. Either run
 
    ```sh
-   xattr -dr com.apple.quarantine /Applications/Wallfly.app
+   sudo xattr -dr com.apple.quarantine /Applications/Wallfly.app
    ```
 
    or try to open it once and then use System Settings → Privacy & Security → "Open Anyway" ("Dennoch öffnen" on German systems).
