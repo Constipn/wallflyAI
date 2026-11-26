@@ -1,7 +1,29 @@
-.build/
-dist/
+# Root .gitignore, maintained by hand. macos/ and windows/ carry their own .gitignore.
+
+# Everywhere
 .DS_Store
 .env
 .env.*
-.local-signing/
 *.log
+
+# Mac build output (macos/, written by the Mac pipeline)
+macos/.build/
+macos/dist/
+macos/.local-signing/
+
+# Leftovers of the old single-folder layout in existing local clones
+/.build/
+/dist/
+
+# Windows build output (windows/, written by the Windows pipeline)
+bin/
+obj/
+windows/dist/
+windows/.tools/
+windows/.packages/
+windows/models/
+windows/whisper/
+windows/native/build/
+TestResults/
+.vs/
+*.user

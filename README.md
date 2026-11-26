@@ -8,11 +8,11 @@ Record, transcribe and summarize meetings with local models or your preferred cl
 
 [![License: MIT](https://img.shields.io/github/license/Constipn/wallflyAI)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/Constipn/wallflyAI)](https://github.com/Constipn/wallflyAI/releases/latest)
-[![Platform: macOS 26+ on Apple Silicon](https://img.shields.io/badge/platform-macOS%2026%2B%20%C2%B7%20Apple%20Silicon-lightgrey)](#download)
+[![Platforms: macOS 26+ (Apple Silicon) · Windows (coming soon)](https://img.shields.io/badge/platforms-macOS%2026%2B%20%28Apple%20Silicon%29%20%C2%B7%20Windows%20%28coming%20soon%29-lightgrey)](#download)
 
-[**Download for Mac**](https://github.com/Constipn/wallflyAI/releases/latest/download/Wallfly.dmg) · Windows coming later · [Report a bug](https://github.com/Constipn/wallflyAI/issues)
+[**Download for Mac**](https://github.com/Constipn/wallflyAI/releases/latest/download/Wallfly.dmg) · <!-- windows-download -->Windows: coming soon<!-- /windows-download --> · [Report a bug](https://github.com/Constipn/wallflyAI/issues)
 
-![Wallfly demo](assets/demo.gif)
+![Wallfly demo](macos/assets/demo.gif)
 
 </div>
 
@@ -41,7 +41,7 @@ Your meeting library is stored on your computer in either mode. Wallfly has no c
 - **Write your own notes.** Capture thoughts, questions and key points while you listen.
 - **Follow the transcript.** Deepgram streams live text during the call; OpenAI and local Whisper also update the transcript as you record. Choose English, German or automatic language detection.
 - **Keep meetings organized.** Browse your local library, group meetings into folders, search across them and export notes and transcripts as Markdown.
-- **Get Teams-specific help.** Optional automatic call detection offers a recording reminder for native Teams calls. Teams detection and speaker names require Accessibility permission; optional local speaker matching helps attribute the conversation. Start recordings manually for other apps.
+- **Get Teams-specific help.** Optional automatic call detection offers a recording reminder for native Teams calls. Optional local speaker matching helps attribute the conversation. Start recordings manually for other apps.
 
 ### AI features
 
@@ -58,13 +58,15 @@ Note enhancement and to-do recognition start only when you request them. Your or
 3. **Create clear outcomes.** After stopping the recording, click **Enhance notes** to combine your notes and transcript into Enhanced Notes and review suggested to-dos.
 4. **Keep and reuse.** Find the meeting in your local library, organize it in a folder, export it, or read it through an MCP-compatible AI tool.
 
-Cloud providers require API keys. A ChatGPT or Claude subscription does not include API usage. Keys are stored in the macOS Keychain.
+Cloud providers require API keys. A ChatGPT or Claude subscription does not include API usage.
 
 ## Download
 
-[**Download Wallfly.dmg**](https://github.com/Constipn/wallflyAI/releases/latest/download/Wallfly.dmg) from the [Releases page](https://github.com/Constipn/wallflyAI/releases/latest). Requires macOS 26 or later on Apple Silicon.
+### Mac
 
-**Windows is planned for later.** The current release requires a Mac with Apple Silicon (M1 or newer).
+Requires macOS 26 or later on a Mac with Apple Silicon (M1 or newer).
+
+[**Download Wallfly.dmg**](https://github.com/Constipn/wallflyAI/releases/latest/download/Wallfly.dmg) from the [Releases page](https://github.com/Constipn/wallflyAI/releases/latest).
 
 1. Open the DMG and drag Wallfly to Applications.
 2. The app is not notarized. Either run
@@ -76,56 +78,38 @@ Cloud providers require API keys. A ChatGPT or Claude subscription does not incl
    or try to open it once and then use System Settings → Privacy & Security → "Open Anyway" ("Dennoch öffnen" on German systems).
 3. On first launch, a short setup asks for your storage location, AI providers and API keys, and the microphone and screen and system audio permissions.
 
-<details>
-<summary>Build from source</summary>
+Permissions, data folder and more Mac details: [macos/README.md](macos/README.md).
 
-Requires the Swift 6.2 toolchain (Xcode 26).
+### Windows
 
-```sh
-git clone https://github.com/Constipn/wallflyAI.git
-cd wallflyAI
-./scripts/build.sh
-open dist/Wallfly.app
-```
+<!-- windows-download -->Windows: coming soon<!-- /windows-download -->
 
-The script creates a self-signed identity in `.local-signing/`. Keep that folder so macOS permissions survive rebuilds. The first build needs network access to download the Swift packages and the signing tool.
+## Build from source
 
-</details>
+- **Mac:** see [macos/README.md](macos/README.md#build-from-source).
+- **Windows:** the source will live in `windows/` with its own README once the Windows version is published.
 
 ## Privacy
 
-- **Stored on your Mac:** meetings as JSON files in `~/Library/Application Support/Wallfly`, or a folder you pick in Settings. A cloud-synced folder will sync your meetings. By default, audio is deleted after processing; transcript, notes and speaker names are kept. You can choose to keep the audio.
+- **Stored on your computer:** meetings are saved as local files in a folder you can change in Settings. A cloud-synced folder will sync your meetings. By default, audio is deleted after processing; transcript, notes and speaker names are kept. You can choose to keep the audio.
 - **Sent over the network**, only to the providers you choose:
-  - Audio for transcription goes to Deepgram or OpenAI. With local Whisper, audio stays on your Mac.
+  - Audio for transcription goes to Deepgram or OpenAI. With local Whisper, audio stays on your computer.
   - Your notes and the transcript go to the AI provider when you expand them. Turn this off, or use a local OpenAI-compatible server.
   - The speaker-recognition models are downloaded once from Hugging Face.
-- **Fully local:** local Whisper plus a local OpenAI-compatible server (or no AI notes) keeps meeting processing on your Mac. Install OpenWhispr separately and download the required models before working offline.
+- **Fully local:** local Whisper plus a local OpenAI-compatible server (or no AI notes) keeps meeting processing on your computer. Install OpenWhispr separately and download the required models before working offline.
 - **Telemetry:** none. There is no Wallfly server and no account.
+
+Where the data lives on the Mac: [macos/README.md](macos/README.md#privacy-on-the-mac).
 
 > **Recording consent:** No bot joins or announces the recording. Tell participants and obtain their consent before recording.
 
 ## Local MCP access
 
-Wallfly includes `Contents/MacOS/wallfly-mcp` inside the app. In **Settings → MCP**, copy the configuration into a client supporting local stdio MCP servers. For the usual installation:
+The Mac app includes a local MCP server (stdio) that lets compatible AI clients read your saved meetings. The tools are `search_meetings` (text, participant and ISO 8601 date-time filters; empty query lists meetings), `get_meeting` (notes, tasks and metadata), and `get_transcript` (speakers, relative seconds, provisional state and known gaps).
 
-```json
-{
-  "mcpServers": {
-    "wallfly": {
-      "command": "/Applications/Wallfly.app/Contents/MacOS/wallfly-mcp",
-      "args": []
-    }
-  }
-}
-```
+All saved meetings in the library are readable by a configured client. No audio or credentials are returned, and no files are modified or uploaded by this helper. Your AI client may send the retrieved text to its provider. The helper makes no additional AI requests. This is a local integration, with no cloud endpoint or background login service.
 
-Client configuration formats vary; use this command and argument list in your client's corresponding settings. Restart the connection after configuration. If you move the app, copy the configuration again. The helper follows the library selected in Wallfly, even after a storage move. For a manually selected library, use `"args": ["--library", "/absolute/path/to/library"]`.
-
-The tools are `search_meetings` (text, participant and ISO 8601 date-time filters; empty query lists meetings), `get_meeting` (notes, tasks and metadata), and `get_transcript` (speakers, relative seconds, provisional state and known gaps). Search returns up to 20 meetings by default, maximum 100. Transcript pages default to 100 sections, maximum 500. To continue, pass `next_cursor` as `cursor` with all other arguments unchanged. If saved data changes, restart without a cursor.
-
-All saved meetings in the library are readable by a configured client. No audio or credentials are returned, and no files are modified or uploaded by this helper. Your AI client may send the retrieved text to its provider. The helper makes no additional AI requests. Wallfly's window can remain closed; the Mac and library must be available. This is a local integration, with no cloud endpoint or background login service.
-
-If the library is unavailable, connect its drive or open Wallfly to select its location. Corrupt records are reported as skipped during search; restore them from a backup or inspect them in Wallfly. The settings availability indicator is not a connection indicator. No Python, Node, or separate helper installation is needed.
+Setup on the Mac: [macos/README.md](macos/README.md#local-mcp-access).
 
 ## Contributing
 
@@ -137,4 +121,4 @@ If Wallfly saves you time, a ⭐ on GitHub helps others find it.
 
 [MIT](LICENSE) © 2026 Constipn
 
-The vendored WebRTC audio-processing code keeps its BSD license and patent grant (`Sources/WebRTCAEC/LICENSE`, `Sources/WebRTCAEC/vendor-ns/LICENSE`, `Sources/WebRTCAEC/vendor-ns/PATENTS`, `Sources/WebRTCAEC/JSONCPP-LICENSE`). FluidAudio is under its own license.
+The vendored WebRTC audio-processing code in the Mac app keeps its BSD license and patent grant (`macos/Sources/WebRTCAEC/LICENSE`, `macos/Sources/WebRTCAEC/vendor-ns/LICENSE`, `macos/Sources/WebRTCAEC/vendor-ns/PATENTS`, `macos/Sources/WebRTCAEC/JSONCPP-LICENSE`). FluidAudio is under its own license.
