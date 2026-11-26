@@ -1,0 +1,4 @@
+# Upstream archives fetched for the independent provenance cross-check described in
+# PROVENANCE.md. They are evidence, not inputs: nothing under _downloads/ is compiled,
+# included or linked. Safe to delete.
+_downloads/

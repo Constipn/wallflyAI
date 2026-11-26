@@ -1,0 +1,100 @@
+{
+  "comment": "Pinned downloads for tools/fetch-models.ps1. Every file is verified by SHA-256 before it is moved into place. Destinations are relative to windows/.",
+  "whisperServer": {
+    "project": "ggml-org/whisper.cpp",
+    "version": "v1.9.5",
+    "build": "b5454",
+    "commit": "d1be6fde11ac6e0407606b4e42fe72d34add8037",
+    "license": "MIT",
+    "url": "https://github.com/ggml-org/whisper.cpp/releases/download/b5454/whisper-bin-x64.zip",
+    "archive": "whisper-bin-x64.zip",
+    "size": 8928640,
+    "sha256": "6ba69e3482d7826214f90a6a9c84ca07782aec1e1d0c6a7c30c994fd5d816ccb",
+    "archiveFolder": "Release",
+    "destination": "whisper",
+    "runtimeRequirement": "Microsoft Visual C++ 2015-2022 x64 runtime (MSVCP140, VCRUNTIME140, VCRUNTIME140_1, VCOMP140)",
+    "files": {
+      "whisper-server.exe": "a97456e747f28e7bb09c1dac35f40d94404c5ecffa74aaaaa7a3753ea6543121",
+      "whisper.dll": "034396d75bb5720c1851674ff64a96192b58f6927b68d334ebd254ce6cad9674",
+      "ggml.dll": "31fe18616d872af9b6134b47a6dff8072ae4ecbe5df0273f4f8dc36766c9db8e",
+      "ggml-base.dll": "bede0d6b2d387236ecd2b5dd676d51c8984b5b6e0ae461a12174e9c01345c5f0",
+      "ggml-cpu-x64.dll": "4b4b05caba40d4309b5d710ef74c59ba190516b8489f27bdb1ba11ae33c6e9d3",
+      "ggml-cpu-sse42.dll": "f060318772c4c2dbac312bbfff6ea700b85dbc502bb38585a7186d06d549301a",
+      "ggml-cpu-sandybridge.dll": "04edbdebc01a1d421062a960881a4f34d520d99693999518243f332406444c6e",
+      "ggml-cpu-haswell.dll": "1306b1014c8118d27234d8ddc0e66ced1f8c8476bf85071595fd182ea9b7263b",
+      "ggml-cpu-skylakex.dll": "1774714cf93621406ff35344b54715619a83242ae3e331e44d98a3b35ce801be",
+      "ggml-cpu-cannonlake.dll": "74127b40abd4f595d9db6af0fa313a02e18ff42fc228bfa05281e7c788dd4507",
+      "ggml-cpu-cascadelake.dll": "4b11c427b844eeac87529af9a8d94b35aad2024666beb2a35e59fe3077e4b81e",
+      "ggml-cpu-icelake.dll": "2b4dc4c66e7d8fe2807283816e9cf3b7f7d0556f59df34069871e37eab8aed40",
+      "ggml-cpu-alderlake.dll": "d8f5c56ea490394eeae8b271650f2647aecd039a542d6df9e0140726e62a4603"
+    }
+  },
+  "models": [
+    {
+      "name": "ggml-large-v3-turbo.bin",
+      "purpose": "Local Whisper Turbo transcription (default model).",
+      "repository": "huggingface.co/ggerganov/whisper.cpp",
+      "revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+      "license": "MIT (OpenAI Whisper weights, ggml conversion by the whisper.cpp authors)",
+      "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-large-v3-turbo.bin",
+      "size": 1624555275,
+      "sha256": "1fc70f774d38eb169993ac391eea357ef47c88757ef72ee5943879b7e8e2bc69",
+      "destination": "models/whisper",
+      "testOnly": false
+    },
+    {
+      "name": "ggml-silero-v5.1.2.bin",
+      "purpose": "Server-side VAD (--vad --vad-model), used only when no word times are needed.",
+      "repository": "huggingface.co/ggml-org/whisper-vad",
+      "revision": "9ffd54a1e1ee413ddf265af9913beaf518d1639b",
+      "license": "MIT (Silero VAD by the Silero Team, ggml conversion by ggml-org)",
+      "url": "https://huggingface.co/ggml-org/whisper-vad/resolve/9ffd54a1e1ee413ddf265af9913beaf518d1639b/ggml-silero-v5.1.2.bin",
+      "size": 885098,
+      "sha256": "29940d98d42b91fbd05ce489f3ecf7c72f0a42f027e4875919a28fb4c04ea2cf",
+      "destination": "models/whisper",
+      "testOnly": false
+    },
+    {
+      "name": "ggml-tiny.bin",
+      "purpose": "Small multilingual model for the gated LocalWhisperLiveTests only (fetch-models.ps1 -TestModel).",
+      "repository": "huggingface.co/ggerganov/whisper.cpp",
+      "revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+      "license": "MIT (OpenAI Whisper weights, ggml conversion by the whisper.cpp authors)",
+      "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-tiny.bin",
+      "size": 77691713,
+      "sha256": "be07e048e1e599ad46341c8d2a135645097a538221678b7acdd1b1919c6e1b21",
+      "destination": "models/whisper",
+      "testOnly": true
+    }
+  ],
+  "diarization": {
+    "purpose": "Offline acoustic speaker diarization (Wallfly.Diarization, sherpa-onnx). Fetched by default or alone with fetch-models.ps1 -Diarization. Wallfly.Diarization.ModelLocator pins the same sizes and SHA-256.",
+    "destination": "models/diarization",
+    "runtime": "NuGet org.k2fsa.sherpa.onnx 2.0.1 + org.k2fsa.sherpa.onnx.runtime.win-x64 2.0.1 (Apache-2.0; onnxruntime MIT), referenced by Wallfly.Diarization.csproj, not fetched here.",
+    "files": [
+      {
+        "name": "sherpa-onnx-pyannote-segmentation-3-0",
+        "purpose": "Speaker segmentation: pyannote segmentation-3.0 as ONNX.",
+        "repository": "github.com/k2-fsa/sherpa-onnx, release speaker-segmentation-models",
+        "license": "MIT (pyannote/segmentation-3.0, Copyright (c) 2022 CNRS; ONNX export by k2-fsa)",
+        "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-segmentation-models/sherpa-onnx-pyannote-segmentation-3-0.tar.bz2",
+        "archive": "sherpa-onnx-pyannote-segmentation-3-0.tar.bz2",
+        "size": 6958444,
+        "sha256": "24615ee884c897d9d2ba09bb4d30da6bb1b15e685065962db5b02e76e4996488",
+        "extract": {
+          "sherpa-onnx-pyannote-segmentation-3-0/model.onnx": "220ad67ca923bef2fa91f2390c786097bf305bceb5e261d4af67b38e938e1079",
+          "sherpa-onnx-pyannote-segmentation-3-0/LICENSE": "14d7016ad68e7394d6e6b78d96cc2ae431c905287b89674cfdf021e79e62b8ba"
+        }
+      },
+      {
+        "name": "3dspeaker_speech_eres2net_sv_en_voxceleb_16k.onnx",
+        "purpose": "Speaker embeddings: 3D-Speaker ERes2Net trained on VoxCeleb. Chosen over WeSpeaker ResNet34-LM (same speed, better separation of synthetic voices at threshold 0.6).",
+        "repository": "github.com/k2-fsa/sherpa-onnx, release speaker-recongition-models (hash also in its checksum.txt); original modelscope.cn/models/iic/speech_eres2net_sv_en_voxceleb_16k",
+        "license": "Apache-2.0 (3D-Speaker / ModelScope iic/speech_eres2net_sv_en_voxceleb_16k)",
+        "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/speaker-recongition-models/3dspeaker_speech_eres2net_sv_en_voxceleb_16k.onnx",
+        "size": 26485263,
+        "sha256": "c59158379255ad66e161679cca6af8d52d51e389e3224ab7d7a7baae295c2db5"
+      }
+    ]
+  }
+}

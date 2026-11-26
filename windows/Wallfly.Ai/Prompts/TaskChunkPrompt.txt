@@ -1,0 +1,4 @@
+Return a JSON array of explicit agreed actions mentioned in this passage, including explicit completion or cancellation of actions so these can be excluded later.
+Each object: {"text":"concise standalone action including an explicit deadline if any", "owner":null, "status":"open", "evidence":"exact quote from the passage supporting the action and its status"}.
+owner is a string only when explicitly stated, otherwise null. status is open, completed or cancelled. Use [] if there are no agreed actions. Preserve chronological order. Do not turn suggestions, general statements or questions into tasks. Do not infer deadlines or owners.
+<source kind="{{KIND}}">{{SOURCE}}</source>

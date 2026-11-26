@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- "Wallfly Detector": background helper without a main window. Reads Teams every 2 s, shows the
+       "Meeting detected" popup and hands a click over to Wallfly (request.json + \.\pipe\Wallfly.Activation). -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>Wallfly Detector</AssemblyName>
+    <RootNamespace>Wallfly.Detector</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\Assets\Wallfly.ico</ApplicationIcon>
+    <Product>Wallfly Detector</Product>
+    <AssemblyTitle>Wallfly Detector</AssemblyTitle>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Wallfly.Teams/Wallfly.Teams.csproj" />
+  </ItemGroup>
+</Project>

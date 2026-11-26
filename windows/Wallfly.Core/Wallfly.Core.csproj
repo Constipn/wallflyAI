@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- RecordingSession.FinishingMarked: a test seam for the stop/cutover race. -->
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Wallfly.Audio/Wallfly.Audio.csproj" />
+    <ProjectReference Include="../Wallfly.Transcription/Wallfly.Transcription.csproj" />
+    <ProjectReference Include="../Wallfly.Ai/Wallfly.Ai.csproj" />
+  </ItemGroup>
+</Project>

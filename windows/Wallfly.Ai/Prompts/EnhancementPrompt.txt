@@ -1,0 +1,9 @@
+Create the finished meeting notes, the agreed tasks and a short meeting title from the complete sources below. Return a JSON object:
+{"title": string or null, "notes_markdown": string, "tasks": [{"text": string, "owner": string or null, "status": "open" | "completed" | "cancelled", "existing": integer or null}]}
+notes_markdown: well-structured notes. Start with a short overview, followed by relevant topic headings, confirmed decisions, action items and open questions. Expand the user's typed notes with transcript evidence and keep their priorities. Omit sections without evidence.
+tasks: only explicit agreed actions, including explicit completion or cancellation of actions. Ideas, suggestions, questions and general statements are not tasks. List each action once with its latest status. text is a concise standalone action including an explicit deadline if any. owner is a string only when explicitly stated, otherwise null. Do not infer owners or deadlines. existing is the index of the entry in existing-tasks describing the same commitment (paraphrases, completion or cancellation of it match), otherwise null. Use [] if there are no agreed actions.
+title: one short, specific title for the main topic, 3–7 words and at most 80 characters, without quotes, Markdown, labels or timestamps. null if the topic is unclear.
+<meeting-title>{{MEETING_TITLE}}</meeting-title>
+<typed-notes>{{TYPED_NOTES}}</typed-notes>
+<existing-tasks>{{EXISTING_TASKS}}</existing-tasks>
+<transcript>{{TRANSCRIPT}}</transcript>

@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <!-- Windows Forms only for the tray icon (NotifyIcon) and screen enumeration of the capsule. -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>Wallfly</AssemblyName>
+    <RootNamespace>Wallfly.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\Assets\Wallfly.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup><ProjectReference Include="../Wallfly.Core/Wallfly.Core.csproj" /></ItemGroup>
+  <!-- Teams detection protocol shared with "Wallfly Detector" (pipe, detection files, Run key, sleep events). -->
+  <ItemGroup><ProjectReference Include="../Wallfly.Teams/Wallfly.Teams.csproj" /></ItemGroup>
+  <!-- The Core hooks: Teams call source, live speaker names, speaker matching, speaker editing (IntegrationServices.CreateDefault()). -->
+  <ItemGroup><ProjectReference Include="../Wallfly.Integration/Wallfly.Integration.csproj" /></ItemGroup>
+  <ItemGroup>
+    <!-- MVVM base classes and commands only (ObservableObject, RelayCommand); no source generators are used. -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Strings.cs is the hand-written typed accessor; the resx stays the only source of the values. -->
+    <EmbeddedResource Update="Strings.resx"><Generator></Generator></EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Brand icon: also the tray icon (pack://application:,,,/Wallfly;component/Assets/Wallfly.ico). Built by tools/make_icon.py. -->
+    <Resource Include="..\Assets\Wallfly.ico" Link="Assets\Wallfly.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- The view models are tested in Wallfly.Tests (ViewModel*Tests.cs, Ui*Tests.cs). -->
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+  <!-- WallflyAudio.dll from the native build (windows/native, preset llvm-mingw-release). Optional: a checkout
+       without the native build still compiles; the engine then fails visibly at start. -->
+  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)../native/build/release/bin/WallflyAudio.dll')">
+    <None Include="$(MSBuildThisFileDirectory)../native/build/release/bin/WallflyAudio.dll" Link="WallflyAudio.dll" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+</Project>

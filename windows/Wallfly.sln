@@ -1,0 +1,82 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Core", "Wallfly.Core\Wallfly.Core.csproj", "{1A1E8A2E-0001-4C9A-9C01-A1B2C3D40001}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Audio", "Wallfly.Audio\Wallfly.Audio.csproj", "{1A1E8A2E-0002-4C9A-9C01-A1B2C3D40002}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Transcription", "Wallfly.Transcription\Wallfly.Transcription.csproj", "{1A1E8A2E-0003-4C9A-9C01-A1B2C3D40003}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Ai", "Wallfly.Ai\Wallfly.Ai.csproj", "{1A1E8A2E-0004-4C9A-9C01-A1B2C3D40004}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.App", "Wallfly.App\Wallfly.App.csproj", "{1A1E8A2E-0005-4C9A-9C01-A1B2C3D40005}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Teams", "Wallfly.Teams\Wallfly.Teams.csproj", "{1A1E8A2E-0007-4C9A-9C01-A1B2C3D40007}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Detector", "Wallfly.Detector\Wallfly.Detector.csproj", "{1A1E8A2E-0008-4C9A-9C01-A1B2C3D40008}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Speakers", "Wallfly.Speakers\Wallfly.Speakers.csproj", "{1A1E8A2E-0101-4C9A-9C01-A1B2C3D40101}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Diarization", "Wallfly.Diarization\Wallfly.Diarization.csproj", "{1A1E8A2E-0102-4C9A-9C01-A1B2C3D40102}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Mcp", "Wallfly.Mcp\Wallfly.Mcp.csproj", "{1A1E8A2E-0201-4C9A-9C01-A1B2C3D40201}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wallfly.Integration", "Wallfly.Integration\Wallfly.Integration.csproj", "{1A1E8A2E-0301-4C9A-9C01-A1B2C3D40301}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A1E8A2E-0001-4C9A-9C01-A1B2C3D40001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0001-4C9A-9C01-A1B2C3D40001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0001-4C9A-9C01-A1B2C3D40001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0001-4C9A-9C01-A1B2C3D40001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0002-4C9A-9C01-A1B2C3D40002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0002-4C9A-9C01-A1B2C3D40002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0002-4C9A-9C01-A1B2C3D40002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0002-4C9A-9C01-A1B2C3D40002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0003-4C9A-9C01-A1B2C3D40003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0003-4C9A-9C01-A1B2C3D40003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0003-4C9A-9C01-A1B2C3D40003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0003-4C9A-9C01-A1B2C3D40003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0004-4C9A-9C01-A1B2C3D40004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0004-4C9A-9C01-A1B2C3D40004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0004-4C9A-9C01-A1B2C3D40004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0004-4C9A-9C01-A1B2C3D40004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0005-4C9A-9C01-A1B2C3D40005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0005-4C9A-9C01-A1B2C3D40005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0005-4C9A-9C01-A1B2C3D40005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0005-4C9A-9C01-A1B2C3D40005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0007-4C9A-9C01-A1B2C3D40007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0007-4C9A-9C01-A1B2C3D40007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0007-4C9A-9C01-A1B2C3D40007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0007-4C9A-9C01-A1B2C3D40007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0008-4C9A-9C01-A1B2C3D40008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0008-4C9A-9C01-A1B2C3D40008}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0008-4C9A-9C01-A1B2C3D40008}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0008-4C9A-9C01-A1B2C3D40008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0101-4C9A-9C01-A1B2C3D40101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0101-4C9A-9C01-A1B2C3D40101}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0101-4C9A-9C01-A1B2C3D40101}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0101-4C9A-9C01-A1B2C3D40101}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0102-4C9A-9C01-A1B2C3D40102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0102-4C9A-9C01-A1B2C3D40102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0102-4C9A-9C01-A1B2C3D40102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0102-4C9A-9C01-A1B2C3D40102}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0201-4C9A-9C01-A1B2C3D40201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0201-4C9A-9C01-A1B2C3D40201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0201-4C9A-9C01-A1B2C3D40201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0201-4C9A-9C01-A1B2C3D40201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1E8A2E-0301-4C9A-9C01-A1B2C3D40301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1E8A2E-0301-4C9A-9C01-A1B2C3D40301}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1E8A2E-0301-4C9A-9C01-A1B2C3D40301}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1E8A2E-0301-4C9A-9C01-A1B2C3D40301}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

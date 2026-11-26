@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence><xsd:element name="value" type="xsd:string" minOccurs="0" /></xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence><xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" /></xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- App -->
+  <data name="AppName"><value>Wallfly</value></data>
+  <data name="AlreadyRunning"><value>Wallfly is already running. Open the window from the taskbar or the tray.</value></data>
+  <data name="UnexpectedError"><value>Something went wrong. Your notes may not be saved, so please check them and save again. If it keeps happening, check your network connection and free disk space.</value></data>
+
+  <!-- Sidebar -->
+  <data name="NewNote"><value>New note</value></data>
+  <data name="NewNoteShortcut"><value>Ctrl+N</value></data>
+  <data name="NavMeetings"><value>Meetings</value></data>
+  <data name="NavTodos"><value>My to-dos</value></data>
+  <data name="FoldersHeader"><value>Folders</value></data>
+  <data name="CreateFolder"><value>Create folder</value></data>
+  <data name="AllMeetings"><value>All meetings</value></data>
+  <data name="NoFolder"><value>No folder</value></data>
+  <data name="GoToCurrentRecording"><value>Go to current recording</value></data>
+  <data name="Settings"><value>Settings</value></data>
+  <data name="EditFolderMenu"><value>Edit folder…</value></data>
+  <data name="DeleteFolderMenu"><value>Delete folder…</value></data>
+
+  <!-- Library list -->
+  <data name="SearchResults"><value>Search results</value></data>
+  <data name="SearchMeetings"><value>Search meetings</value></data>
+  <data name="SearchShortcut"><value>Ctrl+F</value></data>
+  <data name="ClearSearch"><value>Clear search</value></data>
+  <data name="SearchingIn"><value>Searching in: {0}</value></data>
+  <data name="SearchAllMeetings"><value>Search all meetings</value></data>
+  <data name="SearchCurrentFolderOnly"><value>Search current folder only</value></data>
+  <data name="Searching"><value>Searching…</value></data>
+  <data name="NoResults"><value>No results</value></data>
+  <data name="NoResultsDetail"><value>No results for “{0}” in “{1}”.</value></data>
+  <data name="NoMeetingsYet"><value>No meetings yet</value></data>
+  <data name="NoMeetingsYetDetail"><value>Create a note or move a meeting into this folder.</value></data>
+  <data name="ResetSearch"><value>Reset search</value></data>
+  <data name="UntitledMeeting"><value>Untitled meeting</value></data>
+  <data name="RecordingInProgress"><value>Recording in progress</value></data>
+  <data name="YourMeetings"><value>Your meetings</value></data>
+  <data name="RenameMeetingMenu"><value>Rename meeting…</value></data>
+  <data name="DeleteMeetingMenu"><value>Delete meeting…</value></data>
+  <data name="MoveToFolder"><value>Move to folder</value></data>
+
+  <!-- Toolbar and detail -->
+  <data name="PreviewCaption"><value>Preview</value></data>
+  <data name="TodosCaption"><value>My to-dos</value></data>
+  <data name="BackToPreview"><value>Back to preview</value></data>
+  <data name="BackToMeetings"><value>Meetings</value></data>
+  <data name="FocusMode"><value>Focus mode</value></data>
+  <data name="ShowLibrary"><value>Show library</value></data>
+  <data name="PresentationMode"><value>Presentation mode</value></data>
+  <data name="PresentationModeHint"><value>Hide floating recording indicator</value></data>
+  <data name="MoreActions"><value>More actions</value></data>
+  <data name="ExportMarkdown"><value>Export Markdown…</value></data>
+  <data name="ShowSavedFiles"><value>Show saved files</value></data>
+  <data name="RedetectSpeakers"><value>Re-detect speakers</value></data>
+  <data name="RedetectSpeakersOnDevice"><value>Re-detect speakers on this device</value></data>
+  <data name="RenameMenu"><value>Rename…</value></data>
+  <data name="DeleteMenu"><value>Delete…</value></data>
+  <data name="EmptyTitle"><value>Room for good thoughts</value></data>
+  <data name="EmptyDetail"><value>Select a meeting or create a new note.</value></data>
+  <data name="EmptySearchDetail"><value>Select a search result to read the match in context.</value></data>
+  <data name="DismissMessage"><value>Dismiss message</value></data>
+  <data name="ErrorOpenSettings"><value>Open settings</value></data>
+  <data name="ErrorTryAgain"><value>Try again</value></data>
+
+  <!-- Preview -->
+  <data name="MatchOf"><value>Match {0} of {1}</value></data>
+  <data name="PreviousMatch"><value>Previous match</value></data>
+  <data name="NextMatch"><value>Next match</value></data>
+  <data name="Edit"><value>Edit</value></data>
+  <data name="NoContentYet"><value>No content yet</value></data>
+  <data name="NoContentTranscriptDetail"><value>Start a recording to capture the conversation.</value></data>
+  <data name="NoContentNotesDetail"><value>Open the meeting to edit it or enhance existing notes.</value></data>
+  <data name="TabMyNotes"><value>My notes</value></data>
+  <data name="TabEnhancedNotes"><value>Enhanced notes</value></data>
+  <data name="TabTranscript"><value>Transcript</value></data>
+  <data name="AssignFolder"><value>Assign folder</value></data>
+  <data name="CreateFolderEllipsis"><value>Create folder…</value></data>
+
+  <!-- Editor -->
+  <data name="MeetingTitleName"><value>Meeting title</value></data>
+  <data name="NotesPlaceholder"><value>Capture thoughts and notes…</value></data>
+  <data name="EnhanceNotes"><value>Enhance notes</value></data>
+  <data name="EnhanceAgain"><value>Enhance again</value></data>
+  <data name="SetUpEnhancement"><value>Set up enhancement…</value></data>
+  <data name="EnhanceNotesHint"><value>Enhance notes and transcript</value></data>
+  <data name="EnhancingNotes"><value>Enhancing notes</value></data>
+  <data name="CaptureWhatMatters"><value>Capture what matters</value></data>
+  <data name="CaptureWhatMattersDetail"><value>After the meeting, turn your notes and the transcript into a clear summary.</value></data>
+  <data name="EnhancedWith"><value>Enhanced with {0}</value></data>
+
+  <!-- Meeting chat -->
+  <data name="ChatPlaceholder"><value>Ask anything</value></data>
+  <data name="ChatInputName"><value>Ask a question about this meeting</value></data>
+  <data name="ChatNew"><value>New chat</value></data>
+  <data name="ChatCollapse"><value>Collapse chat</value></data>
+  <data name="ChatThinking"><value>Thinking…</value></data>
+  <data name="ChatFailed"><value>The answer could not be created. Check the network and try again.</value></data>
+  <data name="ChatMessages"><value>Questions and answers about this meeting</value></data>
+  <!-- Transcript -->
+  <data name="LivePill"><value>Live</value></data>
+  <data name="CopyTranscript"><value>Copy entire transcript</value></data>
+  <data name="Copied"><value>Copied</value></data>
+  <data name="CollapseTranscript"><value>Collapse transcript</value></data>
+  <data name="ShowTranscript"><value>Show transcript</value></data>
+  <data name="HideTranscript"><value>Hide transcript</value></data>
+  <data name="TranscriptGaps"><value>Parts of the transcript may be missing.</value></data>
+  <data name="TranscriptRecordingTitle"><value>Recording in progress</value></data>
+  <data name="TranscriptRecordingDetail"><value>Detected speech appears here as it comes in.</value></data>
+  <data name="TranscriptEmptyTitle"><value>The conversation, ready to read</value></data>
+  <data name="TranscriptEmptyDetail"><value>Start a recording to capture microphone and meeting audio.</value></data>
+  <data name="Transcribing"><value>Transcribing…</value></data>
+  <data name="SegmentNotFinished"><value>Not finished yet</value></data>
+  <data name="Latest"><value>Latest</value></data>
+  <data name="LatestHint"><value>Jump to the latest messages</value></data>
+  <data name="SpeakerMe"><value>Me</value></data>
+  <data name="SpeakerOthers"><value>Others</value></data>
+  <data name="RenameSpeaker"><value>Rename speaker…</value></data>
+  <data name="AssignSegment"><value>Assign this passage…</value></data>
+  <data name="RenameSpeakerTitle"><value>Rename speaker</value></data>
+  <data name="RenameSpeakerDetail"><value>Changes the speaker name throughout the meeting. Enhanced notes can then be regenerated.</value></data>
+  <data name="SpeakerNameLabel"><value>Speaker name</value></data>
+  <data name="AssignSegmentTitle"><value>Assign this passage</value></data>
+  <data name="AssignSegmentDetail"><value>Only the words of this passage change. Later speaker matching keeps your correction.</value></data>
+  <data name="AssignOthersUnknown"><value>Others · unknown</value></data>
+  <data name="NewParticipant"><value>New participant…</value></data>
+  <data name="Assign"><value>Assign</value></data>
+  <data name="SpeakerMatchingWaiting"><value>Waiting for speaker matching…</value></data>
+  <data name="SpeakerMenuHint"><value>Correct speaker or assign segment</value></data>
+  <data name="DiarizationRunning"><value>Matching speakers…</value></data>
+  <data name="DiarizationFailed"><value>Couldn't match the speakers. {0}</value></data>
+  <data name="DiarizationSkipped"><value>Speakers weren't told apart: {0}</value></data>
+  <data name="DiarizationSkippedNoReason"><value>Speakers weren't told apart</value></data>
+  <data name="DiarizationMicrophoneOnly"><value>Only the microphone voices were told apart: {0}</value></data>
+  <data name="DiarizationMicrophoneChannel"><value>Microphone: {0}</value></data>
+  <data name="SpeakerSeparationWaiting"><value>Waiting for the network to separate the speakers in the cloud. Wallfly tries again automatically.</value></data>
+  <data name="SpeakerSeparationWaitingForRecording"><value>Speaker separation waits until the recording ends and then runs automatically.</value></data>
+  <data name="MeetingAudioWarningHint"><value>We haven't heard the other participants for a while. Check that your meeting app plays its sound through this computer's speakers or headset.</value></data>
+  <data name="ResizeTranscript"><value>Drag to resize · Double-click to reset</value></data>
+  <data name="InterimMarker" xml:space="preserve"><value> …</value></data>
+  <data name="TranscriptGapCopy"><value>Gap in the transcript: {0}</value></data>
+
+  <!-- Recording bar -->
+  <data name="StartRecording"><value>Start recording</value></data>
+  <data name="StartingRecording"><value>Starting…</value></data>
+  <data name="StopRecording"><value>Stop recording</value></data>
+  <data name="Finishing"><value>Finishing…</value></data>
+  <data name="StartShortcutHint"><value>Start recording (Ctrl+Shift+R)</value></data>
+  <data name="StopShortcutHint"><value>Stop recording (Ctrl+Shift+E)</value></data>
+  <data name="GoToRecording"><value>Go to recording</value></data>
+  <data name="MeterMicrophone"><value>Microphone</value></data>
+  <data name="MeterMeetingAudio"><value>Meeting audio</value></data>
+  <data name="RecordingInformation"><value>Recording information</value></data>
+  <data name="TranscriptToggle"><value>Transcript</value></data>
+  <data name="InfoMeetingAudioAutomatic"><value>Meeting audio: automatic</value></data>
+  <data name="InfoMeetingAudioSystem"><value>Meeting audio: all computer audio</value></data>
+  <data name="InfoMeetingAudioApp"><value>Meeting audio: {0}</value></data>
+  <data name="InfoChannel"><value>{0}: {1}</value></data>
+  <data name="InfoEchoCancellation"><value>Echo cancellation: working well</value></data>
+  <data name="MicrophoneNotice"><value>Microphone: {0}</value></data>
+  <data name="InfoRecordingGaps"><value>Short audio gaps: {0} ({1} s in total)</value></data>
+  <data name="InfoTranscriptionGaps"><value>Transcript gaps: {0} ({1} s in total)</value></data>
+  <data name="InfoGapFrom"><value>Latest gap at {0}: {1}</value></data>
+  <data name="InfoLastIssue"><value>Last issue: {0}</value></data>
+  <data name="SystemDefault"><value>System default</value></data>
+  <data name="AudioLevelName"><value>{0}, audio level {1} percent</value></data>
+
+  <!-- To-dos -->
+  <data name="TodosTitle"><value>My to-dos</value></data>
+  <data name="OpenCount"><value>{0} open</value></data>
+  <data name="GoToRecordingTitle"><value>Go to recording: {0}</value></data>
+  <data name="IntroTitle"><value>Your place for better meetings</value></data>
+  <data name="IntroDetail"><value>Capture conversations and thoughts, and keep track of agreed tasks.</value></data>
+  <data name="IntroSetUpEnhancement"><value>Set up enhancement</value></data>
+  <data name="IntroLoadExample"><value>Load example</value></data>
+  <data name="HideIntroduction"><value>Hide introduction</value></data>
+  <data name="TasksPending"><value>Task detection is still pending for some meetings.</value></data>
+  <data name="RetryTaskDetection"><value>Retry task detection</value></data>
+  <data name="ReviewSuggestions"><value>Review suggestions: {0}</value></data>
+  <data name="NoTodosYet"><value>No to-dos yet</value></data>
+  <data name="AllDone"><value>All done</value></data>
+  <data name="TodosEmptyDetail"><value>Only your confirmed to-dos appear here. You can review suggestions after enhancement.</value></data>
+  <data name="DoneCount"><value>Done · {0}</value></data>
+  <data name="OpenSourceMeeting"><value>Open source meeting</value></data>
+  <data name="CompleteTask"><value>Complete: {0}</value></data>
+  <data name="ReopenTask"><value>Reopen: {0}</value></data>
+  <data name="ExampleTitle"><value>Example · Product check-in</value></data>
+  <data name="ExampleNote1"><value>Launch the smaller pilot first</value></data>
+  <data name="ExampleNote2"><value>Ask about the onboarding drop-off</value></data>
+  <data name="ExampleNote3"><value>Follow up on accessibility testing</value></data>
+  <data name="ExampleSegment1"><value>Let's start with a smaller pilot so we can learn from the first ten teams.</value></data>
+  <data name="ExampleSegment2"><value>Agreed. The biggest drop-off is on the invite screen. We should simplify that before we expand.</value></data>
+  <data name="ExampleSegment3"><value>I'll review the invite flow on Friday. Can we include keyboard and screen reader testing?</value></data>
+  <data name="ExampleSegment4"><value>Yes. We still need to decide who will run those tests.</value></data>
+
+  <!-- Task review (kept window) -->
+  <data name="TaskReviewTitle"><value>Add to my to-dos?</value></data>
+  <data name="TaskReviewHint"><value>These tasks may be for you. Only accept what you want to do yourself.</value></data>
+  <data name="TaskReviewAccept"><value>Accept</value></data>
+  <data name="TaskReviewDismiss"><value>Not my task</value></data>
+  <data name="TaskReviewLaterHint"><value>You can review these later under My to-dos.</value></data>
+  <data name="TaskReviewLater"><value>Later</value></data>
+
+  <!-- Dialogs -->
+  <data name="Cancel"><value>Cancel</value></data>
+  <data name="Rename"><value>Rename</value></data>
+  <data name="RenameMeetingTitle"><value>Rename meeting</value></data>
+  <data name="MeetingName"><value>Meeting name</value></data>
+  <data name="DeleteMeetingQuestion"><value>Delete this meeting?</value></data>
+  <data name="DeleteMeetingDetail"><value>Notes, transcript, recordings and tasks of this meeting will be deleted.</value></data>
+  <data name="DeleteMeetingConfirm"><value>Delete meeting</value></data>
+  <data name="DeleteFolderQuestion"><value>Delete “{0}”?</value></data>
+  <data name="DeleteFolderDetail"><value>The meetings will be moved to “No folder”. Notes, transcripts and recordings are kept.</value></data>
+  <data name="DeleteFolderConfirm"><value>Delete folder</value></data>
+  <data name="QuitTitle"><value>Save and end meeting?</value></data>
+  <data name="QuitDetail"><value>Notes and the transcript received so far will be saved. Recording and processing will stop; the last segment may be incomplete.</value></data>
+  <data name="QuitReturn"><value>Return to meeting</value></data>
+  <data name="QuitSaveAndEnd"><value>Save and end</value></data>
+  <data name="QuitLibraryMovingTitle"><value>Library is moving…</value></data>
+  <data name="QuitLibraryMovingDetail"><value>Wallfly is moving your meeting library. You can quit as soon as it's done.</value></data>
+  <data name="QuitLibraryMovingReturn"><value>Back to Wallfly</value></data>
+  <data name="SaveFailedTitle"><value>Notes could not be saved</value></data>
+  <data name="SaveFailedDetail"><value>Export a copy before closing.</value></data>
+  <data name="QuitNotFinished"><value>Quitting is not finished yet. Please try again.</value></data>
+  <data name="ExportFailed"><value>The Markdown export could not be saved.</value></data>
+  <data name="MarkdownFilter"><value>Markdown (*.md)|*.md</value></data>
+  <data name="ShutdownReason"><value>Saving your meeting…</value></data>
+
+  <!-- Capsule and tray -->
+  <data name="OpenRunningMeeting"><value>Open notes for the current recording</value></data>
+  <data name="CapsuleTitle"><value>Wallfly · recording</value></data>
+  <data name="TrayRecording"><value>Wallfly · recording</value></data>
+  <data name="TrayFinishing"><value>Wallfly · finishing…</value></data>
+  <data name="TrayOpenMeeting"><value>Open current meeting</value></data>
+  <data name="QuitMenu"><value>Quit Wallfly</value></data>
+
+  <!-- Settings -->
+  <data name="SettingsTitle"><value>Settings</value></data>
+  <data name="CloseSettings"><value>Close settings</value></data>
+  <data name="AreaRecording"><value>Recording</value></data>
+  <data name="AreaAiLanguage"><value>AI &amp; language</value></data>
+  <data name="AreaStorage"><value>Storage</value></data>
+  <data name="SectionAudio"><value>Audio</value></data>
+  <data name="Microphone"><value>Microphone</value></data>
+  <data name="RefreshMicrophones"><value>Refresh microphones</value></data>
+  <data name="SavedMicrophoneUnavailable"><value>Saved microphone · unavailable</value></data>
+  <data name="DevicesUnreadable"><value>Couldn't find your audio devices right now.</value></data>
+  <data name="OutputDevice"><value>Speakers or headset for meeting audio</value></data>
+  <data name="SavedOutputUnavailable"><value>Saved output device · unavailable</value></data>
+  <data name="MeetingAudio"><value>Meeting audio</value></data>
+  <data name="MeetingAudioAutomatic"><value>Automatic (recommended)</value></data>
+  <data name="MeetingAudioWholeSystem"><value>All computer audio</value></data>
+  <data name="SavedAppUnavailable"><value>Saved app · unavailable</value></data>
+  <data name="RefreshApps"><value>Refresh apps</value></data>
+  <data name="MeetingAudioDetail"><value>Automatic records what you hear on your speakers or headset and follows your Teams call. “All computer audio” or a single app can miss other people's voices in Teams calls.</value></data>
+  <data name="AppsUnreadable"><value>Couldn't list your running apps right now.</value></data>
+  <data name="SectionSpeakers"><value>Speakers</value></data>
+  <data name="UseTeamsNames"><value>Use speaker names from Teams</value></data>
+  <data name="MatchVoices"><value>Match voices after the meeting</value></data>
+  <data name="MatchVoicesDetail"><value>Helps label who said what in the transcript. When the Teams names are clear enough, nothing else runs.</value></data>
+  <data name="SpeakerSeparation"><value>Speaker separation</value></data>
+  <data name="SpeakerSeparationDeepgram"><value>Deepgram (cloud)</value></data>
+  <data name="SpeakerSeparationOnDevice"><value>On this device</value></data>
+  <data name="SpeakerSeparationDeepgramDetail"><value>After the meeting, the other participants' audio track is uploaded to Deepgram once more and separated there (the separation itself runs at Deepgram); only on a slow connection is it compressed on this laptop first. Never while a recording runs. Needs the Deepgram API key.</value></data>
+  <data name="SpeakerSeparationOnDeviceDetail"><value>Runs on this computer after the meeting and keeps the processor busy for a while. It never starts while a recording is running.</value></data>
+  <data name="SectionTeams"><value>Microsoft Teams</value></data>
+  <data name="DetectTeams"><value>Detect Teams meetings automatically</value></data>
+  <data name="DetectTeamsDetail"><value>Shows a small reminder when a Teams call starts. Nothing is recorded without your click.</value></data>
+  <data name="AutoStop"><value>Stop recording when the meeting ends</value></data>
+  <data name="HideIndicator"><value>Hide the recording indicator in screen shares</value></data>
+  <data name="HideIndicatorDetail"><value>Keeps the indicator out of shared screens. Works only with some Teams versions.</value></data>
+  <data name="SectionTroubleshooting"><value>Troubleshooting</value></data>
+  <data name="OpenMicrophonePrivacy"><value>Microphone privacy settings</value></data>
+  <data name="OpenSoundSettings"><value>Sound settings</value></data>
+  <data name="CopyDiagnostics"><value>Copy audio diagnostics</value></data>
+  <data name="DiagnosticsCopied"><value>Audio diagnostics copied to the clipboard.</value></data>
+  <data name="DetectorDisabled"><value>Disabled</value></data>
+  <data name="DetectorRunning"><value>Meeting detection is on</value></data>
+  <data name="DetectorNotRunning"><value>Meeting detection is not running</value></data>
+  <data name="DetectorNotResponding"><value>Meeting detection is not responding</value></data>
+  <data name="DetectorNotInstalled"><value>Meeting detection is missing from this installation</value></data>
+  <data name="DetectorAutostartEnabled"><value>Starts when you sign in to Windows</value></data>
+  <data name="DetectorAutostartOff"><value>Does not start when you sign in</value></data>
+  <data name="DetectorAutostartDisabledByUser"><value>Turned off in Windows startup apps. Turn it back on in Settings → Apps → Startup.</value></data>
+  <data name="DetectorAutostartOtherPath"><value>Starts with another Wallfly installation when you sign in</value></data>
+  <data name="StartHelperNow"><value>Start meeting detection</value></data>
+  <data name="RestartHelper"><value>Restart meeting detection</value></data>
+  <data name="DetectorStartFailed"><value>Meeting detection couldn't be started.</value></data>
+  <data name="DetectorStopFailed"><value>Meeting detection couldn't be restarted.</value></data>
+  <data name="DetectorSettingFailed"><value>Couldn't save the meeting detection setting.
+{0}</value></data>
+  <data name="OpenDetectionFolder"><value>Open detection folder</value></data>
+  <data name="CreateTeamsDiagnostics"><value>Create Teams diagnostics</value></data>
+  <data name="TeamsDiagnosticsCreating"><value>Creating Teams diagnostics…</value></data>
+  <data name="TeamsDiagnosticsCreated"><value>Teams diagnostics created. They contain only technical structure data.</value></data>
+  <data name="TeamsDiagnosticsNoResponse"><value>No diagnostics response. Start meeting detection and try again.</value></data>
+  <data name="TeamsDiagnosticsFailed"><value>Couldn't create the diagnostics.
+{0}</value></data>
+  <data name="MicPrefilter"><value>Read Teams only while it uses the microphone</value></data>
+  <data name="MicPrefilterDetail"><value>Meeting detection then ignores Teams while no call is using the microphone. Turn this off if your calls aren't detected.</value></data>
+  <data name="RecordingEndedSleep"><value>Recording ended because the computer went to sleep. The meeting was saved.</value></data>
+  <data name="DetectedMeetingFailed"><value>Couldn't open the detected meeting.
+{0}</value></data>
+  <data name="SectionTranscription"><value>Transcription</value></data>
+  <data name="Service"><value>Service</value></data>
+  <data name="ProviderDeepgram"><value>Deepgram (cloud)</value></data>
+  <data name="ProviderLocalWhisper"><value>Whisper (on this computer)</value></data>
+  <data name="ProviderOpenAi"><value>OpenAI</value></data>
+  <data name="SpeakerQualityHint"><value>Deepgram and Whisper tell speakers apart best. OpenAI is less reliable at it.</value></data>
+  <data name="DeepgramPrivacy"><value>Audio is sent to Deepgram for transcription.</value></data>
+  <data name="DeepgramKey"><value>Deepgram API key</value></data>
+  <data name="OpenAiPrivacy"><value>Audio is sent to OpenAI for transcription.</value></data>
+  <data name="OpenAiKey"><value>OpenAI API key</value></data>
+  <data name="LocalPrivacy"><value>Runs on this PC.</value></data>
+  <data name="WhisperApp"><value>OpenWhispr app</value></data>
+  <data name="WhisperModel"><value>Turbo model</value></data>
+  <data name="Choose"><value>Choose…</value></data>
+  <data name="LocalFound"><value>Turbo model found</value></data>
+  <data name="LocalMissing"><value>App or model not found</value></data>
+  <data name="WhisperAppFilter"><value>Programs (*.exe)|*.exe|All files (*.*)|*.*</value></data>
+  <data name="WhisperModelFilter"><value>Whisper models (*.bin)|*.bin|All files (*.*)|*.*</value></data>
+  <data name="SpokenLanguage"><value>Spoken language</value></data>
+  <data name="LanguageAutomatic"><value>Automatic</value></data>
+  <data name="LanguageGerman"><value>German</value></data>
+  <data name="LanguageEnglish"><value>English</value></data>
+  <data name="CustomVocabulary"><value>Custom vocabulary</value></data>
+  <data name="CustomVocabularyDetail"><value>Names and terms that should be recognised correctly, one per line. Deepgram also gets your name, the Teams participants and words from the meeting title.</value></data>
+  <data name="KeyMissing"><value>No key entered</value></data>
+  <data name="KeyEntered"><value>Key entered · not yet verified</value></data>
+  <data name="SectionEnhancement"><value>Enhancement</value></data>
+  <data name="EnhancementProviderOff"><value>Off</value></data>
+  <data name="EnhancementProviderAnthropic"><value>Anthropic</value></data>
+  <data name="EnhancementProviderOpenAi"><value>OpenAI</value></data>
+  <data name="EnhancementProviderCustom"><value>Custom API (OpenAI-compatible)</value></data>
+  <data name="Model"><value>Model</value></data>
+  <data name="ModelHint"><value>Choose a model or type its name, e.g. gpt-4.1-mini</value></data>
+  <data name="ApiAddress"><value>API address</value></data>
+  <data name="ApiKey"><value>API key</value></data>
+  <data name="ApiKeyOptional"><value>API key · optional</value></data>
+  <data name="SharedOpenAiKey"><value>The OpenAI key is shared with OpenAI transcription.</value></data>
+  <data name="CreateApiKey"><value>Create API key</value></data>
+  <data name="Advanced"><value>Advanced</value></data>
+  <data name="WorkspaceId"><value>Workspace ID (optional)</value></data>
+  <data name="PrivacyAnthropic"><value>Notes and transcript are sent to Anthropic. A Claude subscription is not enough; you need an API key.</value></data>
+  <data name="PrivacyOpenAi"><value>Notes and transcript are sent to OpenAI. A ChatGPT subscription is not enough; you need an API key.</value></data>
+  <data name="PrivacyCustom"><value>Notes and transcript are sent to the address you entered.</value></data>
+  <data name="SectionMyTodos"><value>My to-dos</value></data>
+  <data name="YourName"><value>Your name</value></data>
+  <data name="YourNameHint"><value>How others refer to you in the meeting · optional</value></data>
+  <data name="YourNameDetail"><value>The AI suggests tasks assigned to this name. You confirm each one yourself.</value></data>
+  <data name="SectionStorageLocation"><value>Storage location</value></data>
+  <data name="FolderLabel"><value>Folder</value></data>
+  <data name="Change"><value>Change…</value></data>
+  <data name="ShowInExplorer"><value>Show in Explorer</value></data>
+  <data name="StorageDetail"><value>All meetings, notes and audio files are stored here. Changing the location moves everything.</value></data>
+  <data name="StorageChangeHint"><value>An external drive must be connected when the app starts. Cloud folders sync your meeting data.</value></data>
+  <data name="ChooseLibraryFolder"><value>Choose the folder for the Wallfly library</value></data>
+  <data name="MoveLibraryQuestion"><value>Move the library to “{0}”? Wallfly copies all your meetings and audio files to the new place, checks them, and then removes the old copies.</value></data>
+  <data name="MoveLibraryConfirm"><value>Move</value></data>
+  <data name="MoveLibraryDone"><value>The library was moved to “{0}”.</value></data>
+  <data name="MoveLibraryFailed"><value>Couldn't move your library to “{0}”. Your notes are safe.</value></data>
+  <data name="MovingLibrary"><value>Moving the library… Recording and editing resume when it is done.</value></data>
+  <data name="MoveLibraryTitle"><value>Storage location</value></data>
+  <data name="SectionAudioAfter"><value>Audio after the meeting</value></data>
+  <data name="KeepAudio"><value>Keep</value></data>
+  <data name="KeepAudioDetail"><value>You can have speakers re-detected later. This improves the transcript.</value></data>
+  <data name="DeleteAutomatically"><value>Delete automatically</value></data>
+  <data name="DeleteAfterMatching"><value>Deleted once speakers have been matched. Transcript, notes and speaker names are kept.</value></data>
+  <data name="DeleteAfterTranscript"><value>Deleted as soon as the transcript is ready. Transcript, notes and speaker names are kept.</value></data>
+  <data name="AppliesToNew"><value>Applies to new recordings.</value></data>
+  <data name="PendingDeletion"><value>Audio of “{0}” is still waiting to be deleted</value></data>
+  <data name="MirrorFailedItem"><value>Couldn't save a transcript copy of “{0}”</value></data>
+  <data name="SectionTranscriptCopy"><value>Transcript copy</value></data>
+  <data name="MirrorToggle"><value>Also save the transcript to a folder</value></data>
+  <data name="ChooseFolder"><value>Choose folder…</value></data>
+  <data name="ChooseMirrorFolder"><value>Choose the folder for transcript copies</value></data>
+  <data name="MirrorDetail"><value>For new meetings, as JSON, updated continuously.</value></data>
+  <data name="SwitchMicrophone"><value>Switch microphone</value></data>
+  <data name="UpdateDeepgramKey"><value>Update Deepgram key</value></data>
+  <data name="Reconnect"><value>Reconnect</value></data>
+  <data name="ReconnectHint"><value>Restarts live transcription with this key. Audio keeps being recorded.</value></data>
+  <data name="MoreAfterRecording"><value>More settings can be edited after the recording.</value></data>
+  <data name="ProcessingInProgress"><value>Processing in progress. Settings can be edited afterwards.</value></data>
+  <data name="OpenSetup"><value>Open setup…</value></data>
+  <data name="Done"><value>Done</value></data>
+  <data name="SettingsSaveFailed"><value>Couldn't save your settings. Please try again. If it keeps happening, check that Wallfly may write to your user folder.</value></data>
+
+  <!-- Onboarding -->
+  <data name="SetUpTitle"><value>Set up Wallfly</value></data>
+  <data name="SetUpSubtitle"><value>Three short steps. You can change everything later.</value></data>
+  <data name="StepStorage"><value>Storage</value></data>
+  <data name="StepAi"><value>AI services</value></data>
+  <data name="StepPermissions"><value>Permissions</value></data>
+  <data name="StepLabel"><value>{0} {1}</value></data>
+  <data name="SetUpLater"><value>Set up later</value></data>
+  <data name="Back"><value>Back</value></data>
+  <data name="Next"><value>Next</value></data>
+  <data name="SectionPermissions"><value>Windows permissions</value></data>
+  <data name="PermissionMicrophone"><value>Microphone</value></data>
+  <data name="PermissionMicrophoneDetail"><value>Windows Settings → Privacy &amp; security → Microphone → Let desktop apps access your microphone.</value></data>
+  <data name="PermissionMicrophoneDenied"><value>Microphone access is turned off for desktop apps.</value></data>
+  <data name="Allow"><value>Allow…</value></data>
+  <data name="OpenSettingsButton"><value>Settings</value></data>
+  <data name="FillLater"><value>You can fill in anything missing at any time in Settings.</value></data>
+  <data name="DeepgramKeyMissing"><value>Deepgram API key is missing. Notes keep working; add a key to record and transcribe.</value></data>
+  <data name="OpenAiTranscriptionKeyMissing"><value>OpenAI API key is missing. Notes keep working; add a key to record and transcribe.</value></data>
+  <data name="LocalWhisperMissing"><value>The OpenWhispr app or the Turbo model was not found.</value></data>
+
+  <!-- Folder editor -->
+  <data name="FolderCreateTitle"><value>Create folder</value></data>
+  <data name="FolderEditTitle"><value>Edit folder</value></data>
+  <data name="Close"><value>Close</value></data>
+  <data name="NameAndIcon"><value>Name and icon</value></data>
+  <data name="FolderName"><value>Name</value></data>
+  <data name="ChooseIcon"><value>Choose folder icon</value></data>
+  <data name="FolderColorLabel"><value>Color</value></data>
+  <data name="FolderDescription"><value>Description</value></data>
+  <data name="FolderDescriptionPlaceholder"><value>What is this folder for?</value></data>
+  <data name="Workspace"><value>Workspace</value></data>
+  <data name="PrivateFolders"><value>Private folders, stored on this PC.</value></data>
+  <data name="Create"><value>Create</value></data>
+  <data name="Save"><value>Save</value></data>
+  <data name="FolderIconFolder"><value>Folder</value></data>
+  <data name="FolderIconWork"><value>Work</value></data>
+  <data name="FolderIconTeam"><value>Team</value></data>
+  <data name="FolderIconIdeas"><value>Ideas</value></data>
+  <data name="FolderIconLearning"><value>Learning</value></data>
+  <data name="FolderIconLeaf"><value>Leaf</value></data>
+  <data name="FolderIconStar"><value>Star</value></data>
+  <data name="FolderIconHeart"><value>Heart</value></data>
+  <data name="FolderIconHome"><value>Home</value></data>
+  <data name="FolderIconProjects"><value>Projects</value></data>
+  <data name="ColorBlue"><value>Blue</value></data>
+  <data name="ColorGreen"><value>Green</value></data>
+  <data name="ColorPurple"><value>Purple</value></data>
+  <data name="ColorOrange"><value>Orange</value></data>
+  <data name="ColorPink"><value>Pink</value></data>
+  <data name="ColorTeal"><value>Teal</value></data>
+  <data name="ColorRed"><value>Red</value></data>
+  <data name="ColorYellow"><value>Yellow</value></data>
+  <data name="ColorBrown"><value>Brown</value></data>
+  <data name="ColorGray"><value>Gray</value></data>
+  <data name="CopyDetails"><value>Copy details</value></data>
+  <data name="InfoEchoCancellationLimited"><value>Echo cancellation: limited</value></data>
+</root>

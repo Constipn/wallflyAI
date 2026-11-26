@@ -1,0 +1,106 @@
+<UserControl x:Class="Wallfly.App.Views.RecordingBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="clr-namespace:Wallfly.App"
+             xmlns:controls="clr-namespace:Wallfly.App.Controls">
+  <UserControl.Resources>
+    <controls:VisibleWhen x:Key="VisibleWhen" />
+    <!-- One slow opacity pulse for "live" markers (the transcript icon while transcribing, the red recording dot). -->
+    <Storyboard x:Key="PulseStoryboard">
+      <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0.35" Duration="0:0:0.9" AutoReverse="True" RepeatBehavior="Forever">
+        <DoubleAnimation.EasingFunction><SineEase EasingMode="EaseInOut" /></DoubleAnimation.EasingFunction>
+      </DoubleAnimation>
+    </Storyboard>
+    <!-- Transcript toggle icon: waveform / chevron; accent-coloured and pulsing while the meeting is transcribed live. Pulses only when the system has client-area animations on (reduced motion). -->
+    <Style x:Key="TranscriptToggleIcon" TargetType="controls:Icon">
+      <Setter Property="Kind" Value="Waveform" />
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding Current.TranscriptBoxOpen}" Value="True"><Setter Property="Kind" Value="ChevronDown" /></DataTrigger>
+        <DataTrigger Binding="{Binding Current.Transcript.IsLive}" Value="True"><Setter Property="Foreground" Value="{StaticResource Accent}" /></DataTrigger>
+        <MultiDataTrigger>
+          <MultiDataTrigger.Conditions>
+            <Condition Binding="{Binding Current.Transcript.IsLive}" Value="True" />
+            <Condition Binding="{Binding Source={x:Static SystemParameters.ClientAreaAnimation}, Mode=OneWay}" Value="True" />
+          </MultiDataTrigger.Conditions>
+          <MultiDataTrigger.EnterActions><BeginStoryboard x:Name="IconPulse" Storyboard="{StaticResource PulseStoryboard}" /></MultiDataTrigger.EnterActions>
+          <MultiDataTrigger.ExitActions><RemoveStoryboard BeginStoryboardName="IconPulse" /></MultiDataTrigger.ExitActions>
+        </MultiDataTrigger>
+      </Style.Triggers>
+    </Style>
+    <!-- The red recording dot next to the timer: pulses only while the activity panel shows (the bar is always in the tree). -->
+    <Style x:Key="RecordingDot" TargetType="Ellipse">
+      <Style.Triggers>
+        <MultiDataTrigger>
+          <MultiDataTrigger.Conditions>
+            <Condition Binding="{Binding Recording.ShowActivity}" Value="True" />
+            <Condition Binding="{Binding Source={x:Static SystemParameters.ClientAreaAnimation}, Mode=OneWay}" Value="True" />
+          </MultiDataTrigger.Conditions>
+          <MultiDataTrigger.EnterActions><BeginStoryboard x:Name="DotPulse" Storyboard="{StaticResource PulseStoryboard}" /></MultiDataTrigger.EnterActions>
+          <MultiDataTrigger.ExitActions><RemoveStoryboard BeginStoryboardName="DotPulse" /></MultiDataTrigger.ExitActions>
+        </MultiDataTrigger>
+      </Style.Triggers>
+    </Style>
+  </UserControl.Resources>
+  <StackPanel>
+    <Rectangle Height="1" Fill="{StaticResource Line}" Margin="0,10,0,0" />
+    <DockPanel Margin="24,10,24,16" LastChildFill="True">
+      <!-- Left: transcript toggle and recording information -->
+      <Button x:Name="TranscriptToggle" DockPanel.Dock="Left" Command="{Binding Current.ToggleTranscriptBoxCommand}" ToolTip="{Binding Current.TranscriptToggleHint}"
+              controls:OutsideClick.Exempt="True" Visibility="{Binding Current.ShowTranscriptToggle, Converter={StaticResource VisibleWhen}}" FontSize="12" Margin="0,0,12,0">
+        <StackPanel Orientation="Horizontal">
+          <controls:Icon Size="13" Margin="0,0,6,0" VerticalAlignment="Center" Style="{StaticResource TranscriptToggleIcon}" />
+          <TextBlock Text="{x:Static app:Strings.TranscriptToggle}" />
+        </StackPanel>
+      </Button>
+      <Button x:Name="InfoButton" DockPanel.Dock="Left" Style="{StaticResource IconButton}" Command="{Binding Recording.ToggleInfoCommand}" ToolTip="{x:Static app:Strings.RecordingInformation}"
+              AutomationProperties.Name="{x:Static app:Strings.RecordingInformation}" AutomationProperties.HelpText="{Binding Recording.InfoText}">
+        <controls:Icon Kind="Info" Size="14" />
+      </Button>
+      <Popup x:Name="InfoPopup" IsOpen="{Binding Recording.InfoOpen}" StaysOpen="False" PlacementTarget="{Binding ElementName=InfoButton}" Placement="Top" VerticalOffset="-6" AllowsTransparency="True">
+        <Border x:Name="InfoCard" Background="{StaticResource Paper}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="8" Padding="14" Width="340" Margin="8">
+          <Border.Effect><DropShadowEffect BlurRadius="12" ShadowDepth="2" Opacity="0.12" /></Border.Effect>
+          <TextBox Style="{StaticResource PlainTextBox}" IsReadOnly="True" TextWrapping="Wrap" FontSize="12" Block.LineHeight="18" Text="{Binding Recording.InfoText, Mode=OneWay}" />
+        </Border>
+      </Popup>
+
+      <!-- Right: go to recording, or timer + meters + stop, or start -->
+      <Button DockPanel.Dock="Right" Style="{StaticResource PrimaryButton}" Content="{x:Static app:Strings.GoToRecording}" Command="{Binding Recording.GoToRecordingCommand}"
+              Visibility="{Binding Recording.ShowGoToRecording, Converter={StaticResource VisibleWhen}}" />
+      <Button DockPanel.Dock="Right" Style="{StaticResource PrimaryButton}" Command="{Binding Recording.StopCommand}" ToolTip="{x:Static app:Strings.StopShortcutHint}"
+              AutomationProperties.Name="{Binding Recording.StopText}" Visibility="{Binding Recording.ShowStop, Converter={StaticResource VisibleWhen}}">
+        <StackPanel Orientation="Horizontal">
+          <controls:Icon Kind="Stop" Size="11" Margin="0,0,7,0" VerticalAlignment="Center" />
+          <TextBlock Text="{Binding Recording.StopText}" />
+        </StackPanel>
+      </Button>
+      <Button DockPanel.Dock="Right" Style="{StaticResource PrimaryButton}" Command="{Binding Recording.StartCommand}" ToolTip="{x:Static app:Strings.StartShortcutHint}"
+              AutomationProperties.Name="{Binding Recording.StartText}" Visibility="{Binding Recording.ShowStart, Converter={StaticResource VisibleWhen}}">
+        <StackPanel Orientation="Horizontal">
+          <controls:Icon Kind="Record" Size="12" Margin="0,0,7,0" VerticalAlignment="Center" />
+          <TextBlock Text="{Binding Recording.StartText}" />
+        </StackPanel>
+      </Button>
+      <StackPanel x:Name="Activity" DockPanel.Dock="Right" Orientation="Horizontal" Margin="0,0,16,0" VerticalAlignment="Center" Visibility="{Binding Recording.ShowActivity, Converter={StaticResource VisibleWhen}}">
+        <Ellipse Width="7" Height="7" Fill="{StaticResource Accent}" Margin="0,0,8,0" VerticalAlignment="Center" Style="{StaticResource RecordingDot}" />
+        <TextBlock Text="{Binding Recording.ElapsedText}" FontFamily="{StaticResource MonoFont}" FontSize="13" FontWeight="Medium" VerticalAlignment="Center" />
+        <StackPanel x:Name="Meters" Orientation="Horizontal">
+          <controls:Icon Kind="Microphone" Size="12" Foreground="{StaticResource Muted}" Margin="16,0,6,0" VerticalAlignment="Center" ToolTip="{x:Static app:Strings.MeterMicrophone}" />
+          <controls:AudioMeter Level="{Binding Recording.MeLevel}" ToolTip="{x:Static app:Strings.MeterMicrophone}" AutomationProperties.Name="{Binding Recording.MeLevelName}" />
+          <controls:Icon Kind="Waveform" Size="12" Foreground="{StaticResource Muted}" Margin="16,0,6,0" VerticalAlignment="Center" ToolTip="{x:Static app:Strings.MeterMeetingAudio}" />
+          <controls:AudioMeter Level="{Binding Recording.OthersLevel}" ToolTip="{x:Static app:Strings.MeterMeetingAudio}" AutomationProperties.Name="{Binding Recording.OthersLevelName}" />
+        </StackPanel>
+      </StackPanel>
+      <!-- Silent-audio banner: the meeting audio stays silent while something plays ("We're not receiving audio from …"). -->
+      <StackPanel x:Name="MeetingAudioWarning" DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0"
+                  Visibility="{Binding Recording.ShowMeetingAudioWarning, Converter={StaticResource VisibleWhen}}" ToolTip="{Binding Recording.MeetingAudioWarningHint}">
+        <controls:Icon Kind="Info" Size="12" Foreground="{StaticResource Accent}" Margin="0,0,6,0" VerticalAlignment="Center" />
+        <TextBlock Text="{Binding Recording.MeetingAudioWarning}" FontSize="12" FontWeight="Medium" Foreground="{StaticResource Accent}" VerticalAlignment="Center"
+                   TextTrimming="CharacterEllipsis" MaxWidth="360" AutomationProperties.AutomationId="MeetingAudioWarning" />
+      </StackPanel>
+      <!-- Fills the space between the left controls and the timer: the meeting-audio source Core chose for this recording. -->
+      <TextBlock x:Name="AudioNotice" Text="{Binding Recording.AudioNotice}" ToolTip="{Binding Recording.AudioNotice}" Visibility="{Binding Recording.ShowAudioNotice, Converter={StaticResource VisibleWhen}}"
+                 FontSize="12" Foreground="{StaticResource Muted}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="12,0,12,0"
+                 AutomationProperties.AutomationId="MeetingAudioNotice" />
+    </DockPanel>
+  </StackPanel>
+</UserControl>

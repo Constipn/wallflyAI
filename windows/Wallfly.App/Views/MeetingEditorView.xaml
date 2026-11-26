@@ -1,0 +1,125 @@
+<UserControl x:Class="Wallfly.App.Views.MeetingEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="clr-namespace:Wallfly.App"
+             xmlns:views="clr-namespace:Wallfly.App.Views"
+             xmlns:controls="clr-namespace:Wallfly.App.Controls">
+  <UserControl.Resources>
+    <controls:VisibleWhen x:Key="VisibleWhen" />
+    <controls:EnumIs x:Key="EnumIs" />
+    <controls:Not x:Key="Not" />
+    <!-- "Set up enhancement…" next to the configuration problem (macOS enhancementSetupNotice). -->
+    <DataTemplate x:Key="SetupNotice">
+      <StackPanel Margin="0,8" Visibility="{Binding ConfigurationIssue, Converter={StaticResource VisibleWhen}}">
+        <TextBlock Text="{Binding ConfigurationIssue}" Style="{StaticResource Meta}" />
+        <Button Content="{x:Static app:Strings.SetUpEnhancement}" Style="{StaticResource LinkButton}" Command="{Binding SetUpEnhancementCommand}" Margin="0,6,0,0" />
+      </StackPanel>
+    </DataTemplate>
+  </UserControl.Resources>
+  <Grid x:Name="Root" Margin="38,0">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <!-- Header: the complete header fits; only exceptionally long titles get their own scroll area (max 240 px). -->
+    <ScrollViewer x:Name="HeaderScroll" MaxHeight="240" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Focusable="False">
+      <StackPanel x:Name="Header">
+        <WrapPanel Margin="0,24,0,0" Orientation="Horizontal">
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,4,10,4">
+            <controls:Icon Kind="Clock" Size="12" Foreground="{StaticResource Muted}" Margin="0,0,7,0" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding DateText}" FontSize="12" Foreground="{StaticResource Muted}" VerticalAlignment="Center" />
+            <TextBlock Text=" · " FontSize="12" Foreground="{StaticResource Muted}" VerticalAlignment="Center" Visibility="{Binding HasDuration, Converter={StaticResource VisibleWhen}}" />
+            <TextBlock Text="{Binding DurationText}" FontSize="12" Foreground="{StaticResource Muted}" FontFamily="{StaticResource MonoFont}" VerticalAlignment="Center" Visibility="{Binding HasDuration, Converter={StaticResource VisibleWhen}}" />
+          </StackPanel>
+          <views:FolderPickerButton DataContext="{Binding Folder}" VerticalAlignment="Center" />
+        </WrapPanel>
+        <Grid Margin="0,14,0,26">
+          <TextBlock Text="{x:Static app:Strings.UntitledMeeting}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="31" Foreground="{StaticResource PlaceholderInk}" IsHitTestVisible="False" TextWrapping="Wrap"
+                     Visibility="{Binding Text, ElementName=TitleBox, Converter={StaticResource VisibleWhen}, ConverterParameter=not}" />
+          <TextBox x:Name="TitleBox" Style="{StaticResource PlainTextBox}" FontFamily="{StaticResource DisplayFont}" FontSize="31" FontWeight="SemiBold" TextWrapping="Wrap" AcceptsReturn="False"
+                   Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsLocked}" AutomationProperties.Name="{x:Static app:Strings.MeetingTitleName}" />
+        </Grid>
+        <DockPanel>
+          <controls:Icon DockPanel.Dock="Right" Kind="Sparkles" Size="15" Foreground="{StaticResource Accent}" VerticalAlignment="Top" Visibility="{Binding ShowsSparkles, Converter={StaticResource VisibleWhen}}" />
+          <StackPanel Orientation="Horizontal">
+            <RadioButton Style="{StaticResource TabRadio}" GroupName="NoteTabs" Content="{x:Static app:Strings.TabMyNotes}" IsChecked="{Binding Tab, Converter={StaticResource EnumIs}, ConverterParameter=Notes}" ToolTip="Ctrl+1" />
+            <RadioButton Style="{StaticResource TabRadio}" GroupName="NoteTabs" Content="{x:Static app:Strings.TabEnhancedNotes}" IsChecked="{Binding Tab, Converter={StaticResource EnumIs}, ConverterParameter=Enhanced}" ToolTip="Ctrl+2" />
+            <RadioButton Style="{StaticResource TabRadio}" GroupName="NoteTabs" Content="{x:Static app:Strings.TabTranscript}" IsChecked="{Binding Tab, Converter={StaticResource EnumIs}, ConverterParameter=Transcript}" ToolTip="Ctrl+3"
+                         Visibility="{Binding IsTranscriptTabAvailable, Converter={StaticResource VisibleWhen}}" />
+          </StackPanel>
+        </DockPanel>
+      </StackPanel>
+    </ScrollViewer>
+    <Rectangle Grid.Row="1" Height="1" Fill="{StaticResource Line}" />
+
+    <!-- My notes -->
+    <DockPanel Grid.Row="2" Visibility="{Binding CurrentTab, Converter={StaticResource EnumIs}, ConverterParameter=Notes}">
+      <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,16" Visibility="{Binding HasTranscriptText, Converter={StaticResource VisibleWhen}}">
+        <Button x:Name="EnhanceButton" Style="{StaticResource PrimaryButton}" Command="{Binding EnhanceCommand}" ToolTip="{Binding EnhanceToolTip}" Padding="12,6">
+          <StackPanel Orientation="Horizontal">
+            <controls:Icon Kind="Sparkles" Size="13" Margin="0,0,7,0" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding EnhanceButtonText}" />
+          </StackPanel>
+        </Button>
+        <StackPanel Orientation="Horizontal" Margin="12,0,0,0" VerticalAlignment="Center" Visibility="{Binding IsEnhancing, Converter={StaticResource VisibleWhen}}">
+          <controls:Spinner Size="13" Margin="0,0,8,0" />
+          <TextBlock Text="{Binding ProgressText}" FontSize="12" Foreground="{StaticResource Muted}" TextTrimming="CharacterEllipsis" MaxWidth="460" VerticalAlignment="Center" />
+        </StackPanel>
+      </StackPanel>
+      <Grid>
+        <TextBlock Text="{x:Static app:Strings.NotesPlaceholder}" FontSize="16" Foreground="{StaticResource PlaceholderInk}" Margin="2,25,0,0" IsHitTestVisible="False"
+                   Visibility="{Binding Text, ElementName=NotesBox, Converter={StaticResource VisibleWhen}, ConverterParameter=not}" />
+        <TextBox x:Name="NotesBox" Style="{StaticResource PlainTextBox}" FontSize="14" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"
+                 VerticalScrollBarVisibility="Auto" Padding="0,24,0,8" Block.LineHeight="21" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding IsLocked}" AutomationProperties.Name="{x:Static app:Strings.TabMyNotes}" />
+      </Grid>
+    </DockPanel>
+
+    <!-- Enhanced notes -->
+    <Grid Grid.Row="2" Visibility="{Binding CurrentTab, Converter={StaticResource EnumIs}, ConverterParameter=Enhanced}">
+      <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsEnhancing, Converter={StaticResource VisibleWhen}}">
+        <controls:Spinner Size="14" HorizontalAlignment="Center" />
+        <TextBlock Text="{x:Static app:Strings.EnhancingNotes}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="20" HorizontalAlignment="Center" Margin="0,16,0,0" />
+        <TextBlock Text="{Binding ProgressText}" FontSize="12" Foreground="{StaticResource Muted}" TextAlignment="Center" TextWrapping="Wrap" MaxWidth="420" Margin="0,16,0,0" />
+      </StackPanel>
+      <ScrollViewer VerticalScrollBarVisibility="Auto" Visibility="{Binding ShowEnhancedEmpty, Converter={StaticResource VisibleWhen}}">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="460" Margin="0,24">
+          <controls:Icon Kind="Sparkles" Size="28" Foreground="{StaticResource Accent}" HorizontalAlignment="Center" />
+          <ContentControl Content="{Binding}" ContentTemplate="{StaticResource SetupNotice}" Focusable="False" HorizontalAlignment="Center" />
+          <TextBlock Text="{x:Static app:Strings.CaptureWhatMatters}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="23" HorizontalAlignment="Center" Margin="0,14,0,0" />
+          <TextBlock Text="{x:Static app:Strings.CaptureWhatMattersDetail}" FontSize="13" Foreground="{StaticResource Muted}" TextAlignment="Center" TextWrapping="Wrap" LineHeight="19" Margin="0,14,0,0" />
+          <Button Content="{x:Static app:Strings.EnhanceNotes}" Style="{StaticResource PrimaryButton}" Command="{Binding EnhanceAgainCommand}" HorizontalAlignment="Center" Margin="0,20,0,0"
+                  Visibility="{Binding HasTranscriptText, Converter={StaticResource VisibleWhen}}" />
+        </StackPanel>
+      </ScrollViewer>
+      <ScrollViewer x:Name="EnhancedScroll" VerticalScrollBarVisibility="Auto" Visibility="{Binding ShowEnhancedContent, Converter={StaticResource VisibleWhen}}">
+        <StackPanel Margin="0,25">
+          <ContentControl Content="{Binding}" ContentTemplate="{StaticResource SetupNotice}" Focusable="False" />
+          <RichTextBox IsReadOnly="True" IsDocumentEnabled="True" BorderThickness="0" Background="Transparent" Padding="0" Margin="-2,0,0,0"
+                       VerticalScrollBarVisibility="Disabled" controls:Markdown.Text="{Binding EnhancedMarkdown}" AutomationProperties.Name="{x:Static app:Strings.TabEnhancedNotes}">
+            <RichTextBox.Template>
+              <ControlTemplate TargetType="RichTextBox"><ScrollViewer x:Name="PART_ContentHost" Focusable="False" /></ControlTemplate>
+            </RichTextBox.Template>
+          </RichTextBox>
+          <TextBlock Text="{Binding EnhancedFooter}" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,20,0,0" />
+          <Button Content="{x:Static app:Strings.EnhanceAgain}" Command="{Binding EnhanceAgainCommand}" FontSize="12" HorizontalAlignment="Left" Margin="0,14,0,0" />
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+
+    <!-- Transcript tab (finished meetings) -->
+    <DockPanel Grid.Row="2" Margin="-23,0" Visibility="{Binding CurrentTab, Converter={StaticResource EnumIs}, ConverterParameter=Transcript}">
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="23,18,23,10">
+        <Button Style="{StaticResource IconButton}" Command="{Binding Transcript.CopyCommand}" ToolTip="{x:Static app:Strings.CopyTranscript}" AutomationProperties.Name="{x:Static app:Strings.CopyTranscript}">
+          <StackPanel Orientation="Horizontal">
+            <controls:Icon Kind="Copy" Size="13" />
+            <TextBlock Text="{x:Static app:Strings.Copied}" FontSize="12" Margin="5,0,0,0" Visibility="{Binding Transcript.Copied, Converter={StaticResource VisibleWhen}}" />
+          </StackPanel>
+        </Button>
+      </StackPanel>
+      <views:TranscriptChatView DataContext="{Binding Transcript}" />
+    </DockPanel>
+  </Grid>
+</UserControl>

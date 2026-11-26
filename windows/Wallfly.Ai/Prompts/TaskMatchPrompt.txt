@@ -1,0 +1,4 @@
+Match the candidate action to an existing action only if they describe the same commitment with compatible explicit owners and deadlines. Paraphrases of the same task match. Distinct tasks must remain distinct. Completion or cancellation of the same task also matches.
+Return {"match":null} if none matches, otherwise {"match":0} with the matching index from the list. No other fields.
+<candidate>{{CANDIDATE}}</candidate>
+<existing>{{EXISTING}}</existing>

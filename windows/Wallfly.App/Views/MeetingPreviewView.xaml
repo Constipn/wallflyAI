@@ -1,0 +1,97 @@
+<UserControl x:Class="Wallfly.App.Views.MeetingPreviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="clr-namespace:Wallfly.App"
+             xmlns:views="clr-namespace:Wallfly.App.Views"
+             xmlns:controls="clr-namespace:Wallfly.App.Controls">
+  <UserControl.Resources>
+    <controls:VisibleWhen x:Key="VisibleWhen" />
+    <controls:EnumIs x:Key="EnumIs" />
+  </UserControl.Resources>
+  <DockPanel>
+    <!-- "Match i of n" with arrows that switch to the tab of the match -->
+    <Border DockPanel.Dock="Top" Background="{StaticResource Gold100}" Padding="12,8" Visibility="{Binding HasHits, Converter={StaticResource VisibleWhen}}">
+      <DockPanel>
+        <Button DockPanel.Dock="Right" Style="{StaticResource IconButton}" Command="{Binding NextMatchCommand}" ToolTip="{x:Static app:Strings.NextMatch}" AutomationProperties.Name="{x:Static app:Strings.NextMatch}">
+          <controls:Icon Kind="ChevronDown" Size="11" Foreground="{StaticResource Ink}" />
+        </Button>
+        <Button DockPanel.Dock="Right" Style="{StaticResource IconButton}" Command="{Binding PreviousMatchCommand}" ToolTip="{x:Static app:Strings.PreviousMatch}" AutomationProperties.Name="{x:Static app:Strings.PreviousMatch}">
+          <controls:Icon Kind="ChevronUp" Size="11" Foreground="{StaticResource Ink}" />
+        </Button>
+        <controls:Icon DockPanel.Dock="Left" Kind="Search" Size="12" Foreground="{StaticResource Ink}" Margin="0,0,8,0" VerticalAlignment="Center" />
+        <TextBlock Text="{Binding MatchText}" FontSize="12" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+      </DockPanel>
+    </Border>
+
+    <!-- "Ask anything" about a finished meeting: docked below the scrolling page, outside the tab bodies, so the same on
+         all three tabs; aligned with the page column (the card's own inset is 25, the page's 28, at most 820 wide). -->
+    <Grid x:Name="ChatHost" DockPanel.Dock="Bottom" Margin="3,0,0,16" DataContext="{Binding Chat}"
+          Visibility="{Binding IsAvailable, Converter={StaticResource VisibleWhen}, FallbackValue=Collapsed}">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" MaxWidth="870" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <views:MeetingChatPanel x:Name="ChatPanel" />
+    </Grid>
+
+    <ScrollViewer x:Name="Scroller" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel x:Name="Page" Margin="28" MaxWidth="820" HorizontalAlignment="Left">
+        <TextBlock Text="{Binding DateText}" FontSize="12" Foreground="{StaticResource Muted}" />
+        <TextBlock x:Name="TitleBlock" FontFamily="{StaticResource DisplayFont}" FontSize="30" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,14,0,0"
+                   controls:Highlight.Text="{Binding Title}" controls:Highlight.Query="{Binding Query}" />
+        <DockPanel Margin="0,14,0,0">
+          <Button DockPanel.Dock="Right" Command="{Binding EditCommand}" FontSize="12" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+              <controls:Icon Kind="Edit" Size="12" Margin="0,0,6,0" VerticalAlignment="Center" />
+              <TextBlock Text="{x:Static app:Strings.Edit}" />
+            </StackPanel>
+          </Button>
+          <views:FolderPickerButton DataContext="{Binding Folder}" HorizontalAlignment="Left" />
+        </DockPanel>
+        <WrapPanel Margin="0,22,0,0">
+          <RadioButton Style="{StaticResource TabRadio}" GroupName="PreviewTabs" Content="{x:Static app:Strings.TabMyNotes}" Margin="0,0,14,0" IsChecked="{Binding Source, Converter={StaticResource EnumIs}, ConverterParameter=Notes}" />
+          <RadioButton Style="{StaticResource TabRadio}" GroupName="PreviewTabs" Content="{x:Static app:Strings.TabEnhancedNotes}" Margin="0,0,14,0" IsChecked="{Binding Source, Converter={StaticResource EnumIs}, ConverterParameter=Enhanced}" />
+          <RadioButton Style="{StaticResource TabRadio}" GroupName="PreviewTabs" Content="{x:Static app:Strings.TabTranscript}" Margin="0,0,14,0" IsChecked="{Binding Source, Converter={StaticResource EnumIs}, ConverterParameter=Transcript}" />
+        </WrapPanel>
+        <DockPanel Margin="0,8,0,0" Visibility="{Binding IsTranscriptSource, Converter={StaticResource VisibleWhen}}">
+          <Button DockPanel.Dock="Right" Style="{StaticResource IconButton}" Command="{Binding CopyTranscriptCommand}" IsEnabled="{Binding CanCopyTranscript}" ToolTip="{x:Static app:Strings.CopyTranscript}" AutomationProperties.Name="{x:Static app:Strings.CopyTranscript}">
+            <controls:Icon Kind="Copy" Size="13" />
+          </Button>
+          <Border />
+        </DockPanel>
+        <Rectangle Height="1" Fill="{StaticResource Line}" Margin="0,8,0,14" />
+
+        <StackPanel Visibility="{Binding HasPassages, Converter={StaticResource VisibleWhen}, ConverterParameter=not}" Margin="0,14,0,0">
+          <controls:Icon Kind="{Binding EmptyIcon}" Size="25" Foreground="{StaticResource Muted}" HorizontalAlignment="Left" StrokeWidth="1.2" />
+          <TextBlock Text="{x:Static app:Strings.NoContentYet}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="22" Margin="0,12,0,0" />
+          <TextBlock Text="{Binding EmptyDetail}" FontSize="14" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,12,0,0" />
+        </StackPanel>
+
+        <ItemsControl x:Name="PassageList" ItemsSource="{Binding Passages}" Focusable="False">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Grid Margin="0,0,0,12">
+                <Border CornerRadius="4" Padding="8">
+                  <Border.Style>
+                    <Style TargetType="Border">
+                      <Setter Property="Background" Value="Transparent" />
+                      <Style.Triggers><DataTrigger Binding="{Binding IsActive}" Value="True"><Setter Property="Background" Value="{StaticResource Gold100Soft}" /></DataTrigger></Style.Triggers>
+                    </Style>
+                  </Border.Style>
+                  <StackPanel>
+                    <TextBlock Text="{Binding Timestamp}" FontFamily="{StaticResource MonoFont}" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,0,0,6"
+                               Visibility="{Binding Timestamp, Converter={StaticResource VisibleWhen}}" />
+                    <TextBlock TextWrapping="Wrap" LineHeight="21" controls:MarkdownLine.Text="{Binding MarkdownText}" Visibility="{Binding IsMarkdown, Converter={StaticResource VisibleWhen}}" />
+                    <TextBlock TextWrapping="Wrap" FontSize="14" LineHeight="21" controls:Highlight.Text="{Binding Text}" controls:Highlight.Query="{Binding Query}"
+                               Visibility="{Binding IsMarkdown, Converter={StaticResource VisibleWhen}, ConverterParameter=not}" />
+                  </StackPanel>
+                </Border>
+                <Border Width="3" CornerRadius="2" Background="{StaticResource Gold600}" HorizontalAlignment="Left" Visibility="{Binding IsActive, Converter={StaticResource VisibleWhen}}" />
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</UserControl>

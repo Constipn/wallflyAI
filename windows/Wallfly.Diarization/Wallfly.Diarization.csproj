@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Offline acoustic speaker diarization of the Others archives (spec 5.3) with sherpa-onnx: pyannote
+       segmentation-3.0 + WeSpeaker ResNet34-LM embeddings + agglomerative clustering. Models are not part of the
+       build; tools/fetch-models.ps1 places them in windows/models/diarization (see ModelLocator). -->
+  <PropertyGroup>
+    <RootNamespace>Wallfly.Diarization</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Pinned. The managed API (Apache-2.0) depends on nine per-platform runtime packages; IncludeAssets keeps their
+         native files (≈ 250 MB) out of every output, also of projects referencing this one. Only the Windows x64
+         runtime (sherpa-onnx-c-api.dll + onnxruntime.dll, static CRT) is referenced with its native assets. -->
+    <PackageReference Include="org.k2fsa.sherpa.onnx" Version="2.0.1" IncludeAssets="compile;runtime" />
+    <PackageReference Include="org.k2fsa.sherpa.onnx.runtime.win-x64" Version="2.0.1" />
+    <!-- Ogg/Opus upload of the cloud diarization (DeepgramPrerecordedDiarizer). Pure managed, pinned: Concentus 2.2.3
+         (Opus license, BSD-3-Clause style; the package carries no native binaries, the managed encoder is used
+         directly) and Concentus.OggFile 1.0.7 (MIT). Both ship a net8.0 build. -->
+    <PackageReference Include="Concentus" Version="2.2.3" />
+    <PackageReference Include="Concentus.OggFile" Version="1.0.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Wallfly.Speakers/Wallfly.Speakers.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+</Project>

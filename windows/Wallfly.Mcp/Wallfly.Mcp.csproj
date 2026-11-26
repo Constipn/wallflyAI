@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- wallfly-mcp.exe: local, read-only MCP server over stdio (port of WallflyMCP + WallflyReadCore from macOS
+       1.13.0). stdout carries only the protocol; every log line goes to stderr. Never writes into the library. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>wallfly-mcp</AssemblyName>
+    <RootNamespace>Wallfly.Mcp</RootNamespace>
+    <Product>Wallfly MCP</Product>
+    <AssemblyTitle>Wallfly MCP</AssemblyTitle>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Pinned: official C# MCP SDK (Apache-2.0) and the generic host it plugs into. -->
+    <PackageReference Include="ModelContextProtocol" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.13" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Wallfly.Core/Wallfly.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+</Project>

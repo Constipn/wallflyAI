@@ -1,0 +1,30 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "llvm-mingw-release",
+      "displayName": "llvm-mingw x64 Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/release",
+      "toolchainFile": "${sourceDir}/cmake/toolchain-llvm-mingw.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_MAKE_PROGRAM": "${sourceDir}/../.tools/ninja/ninja.exe",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "llvm-mingw-debug",
+      "inherits": "llvm-mingw-release",
+      "binaryDir": "${sourceDir}/build/debug",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    }
+  ],
+  "buildPresets": [
+    { "name": "llvm-mingw-release", "configurePreset": "llvm-mingw-release" },
+    { "name": "llvm-mingw-debug", "configurePreset": "llvm-mingw-debug" }
+  ],
+  "testPresets": [
+    { "name": "llvm-mingw-release", "configurePreset": "llvm-mingw-release", "output": { "outputOnFailure": true } }
+  ]
+}

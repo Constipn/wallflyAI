@@ -1,0 +1,2 @@
+The draft below is in the wrong language. Rewrite it in the required output language. Preserve exactly the supported facts, uncertainty, names, action ownership and dates. Translate all headings and prose. Do not add facts or a preamble.
+<draft>{{DRAFT}}</draft>

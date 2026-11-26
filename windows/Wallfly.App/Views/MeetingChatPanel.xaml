@@ -1,0 +1,78 @@
+<UserControl x:Class="Wallfly.App.Views.MeetingChatPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="clr-namespace:Wallfly.App"
+             xmlns:controls="clr-namespace:Wallfly.App.Controls">
+  <UserControl.Resources>
+    <controls:VisibleWhen x:Key="VisibleWhen" />
+  </UserControl.Resources>
+  <!-- One rounded card: collapsed only the "Ask anything" field, expanded the questions and answers above it. -->
+  <Grid Margin="25,10,25,0">
+    <!-- The soft shadow of the "Latest" pill sits on its own layer, so the text above it is not rendered through an effect. -->
+    <Border Background="{StaticResource Paper}" CornerRadius="22" IsHitTestVisible="False">
+      <Border.Effect><DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.08" /></Border.Effect>
+    </Border>
+    <Border x:Name="Card" Background="{StaticResource Paper}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="22">
+      <DockPanel>
+        <!-- Input: Enter sends, Shift+Enter starts a new line, Esc collapses the panel. -->
+        <Grid DockPanel.Dock="Bottom" Margin="20,11,20,11">
+          <TextBlock Text="{x:Static app:Strings.ChatPlaceholder}" FontSize="14" Foreground="{StaticResource PlaceholderInk}" IsHitTestVisible="False" Margin="2,0,0,0" VerticalAlignment="Center"
+                     Visibility="{Binding Text, ElementName=Input, Converter={StaticResource VisibleWhen}, ConverterParameter=not}" />
+          <TextBox x:Name="Input" Style="{StaticResource PlainTextBox}" FontSize="14" AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="120" VerticalScrollBarVisibility="Auto" VerticalAlignment="Center"
+                   Text="{Binding Draft, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="{x:Static app:Strings.ChatInputName}"
+                   PreviewKeyDown="Input_PreviewKeyDown" PreviewMouseLeftButtonDown="Input_PreviewMouseLeftButtonDown" />
+        </Grid>
+
+        <!-- Expanded: "New chat" and "Collapse", the messages, a spinner while the answer is created, an inline error. -->
+        <DockPanel x:Name="Panel" Visibility="{Binding ShowsPanel, Converter={StaticResource VisibleWhen}}">
+          <Rectangle DockPanel.Dock="Bottom" Height="1" Fill="{StaticResource Line}" Opacity="0.7" />
+          <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,12,0">
+            <Button Style="{StaticResource IconButton}" Command="{Binding NewChatCommand}" ToolTip="{x:Static app:Strings.ChatNew}" AutomationProperties.Name="{x:Static app:Strings.ChatNew}">
+              <controls:Icon Kind="Edit" Size="13" />
+            </Button>
+            <Button Style="{StaticResource IconButton}" Command="{Binding CollapseCommand}" ToolTip="{x:Static app:Strings.ChatCollapse}" AutomationProperties.Name="{x:Static app:Strings.ChatCollapse}" Margin="2,0,0,0">
+              <controls:Icon Kind="ChevronDown" Size="13" />
+            </Button>
+          </StackPanel>
+          <ScrollViewer x:Name="Scroller" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" MaxHeight="{Binding MessagesMaxHeight}" Focusable="False"
+                        AutomationProperties.Name="{x:Static app:Strings.ChatMessages}">
+            <StackPanel Margin="23,2,23,16">
+              <ItemsControl ItemsSource="{Binding Messages}" Focusable="False">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Grid Margin="0,0,0,14">
+                      <!-- The question: right-aligned grey bubble. -->
+                      <controls:BubbleRow Trailing="True" Visibility="{Binding FromUser, Converter={StaticResource VisibleWhen}}">
+                        <Border Background="{StaticResource TranscriptOthers}" CornerRadius="14,14,4,14" Padding="13,9">
+                          <TextBlock Text="{Binding Text}" FontSize="13" TextWrapping="Wrap" LineHeight="18" Foreground="{StaticResource Ink}" />
+                        </Border>
+                      </controls:BubbleRow>
+                      <!-- The answer: left, no bubble, rendered like the enhanced notes and selectable. -->
+                      <RichTextBox IsReadOnly="True" IsDocumentEnabled="True" BorderThickness="0" Background="Transparent" Padding="0" Margin="-2,0,0,0"
+                                   VerticalScrollBarVisibility="Disabled" controls:Markdown.Text="{Binding Text}" Visibility="{Binding FromAssistant, Converter={StaticResource VisibleWhen}}">
+                        <RichTextBox.Template>
+                          <ControlTemplate TargetType="RichTextBox"><ScrollViewer x:Name="PART_ContentHost" Focusable="False" /></ControlTemplate>
+                        </RichTextBox.Template>
+                      </RichTextBox>
+                    </Grid>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <StackPanel Orientation="Horizontal" Visibility="{Binding IsThinking, Converter={StaticResource VisibleWhen}}" Margin="0,0,0,6">
+                <controls:Spinner Size="13" Margin="0,0,8,0" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static app:Strings.ChatThinking}" FontSize="13" Foreground="{StaticResource Muted}" VerticalAlignment="Center" />
+              </StackPanel>
+              <DockPanel Visibility="{Binding HasError, Converter={StaticResource VisibleWhen}}" Margin="0,0,0,6">
+                <controls:Icon DockPanel.Dock="Left" Kind="Warning" Size="12" Foreground="{StaticResource Accent}" Margin="0,2,7,0" VerticalAlignment="Top" />
+                <StackPanel>
+                  <TextBlock Text="{Binding Error}" FontSize="12" Foreground="{StaticResource Accent}" TextWrapping="Wrap" LineHeight="17" />
+                  <Button Style="{StaticResource LinkButton}" Content="{Binding ErrorActionText}" Command="{Binding ErrorActionCommand}" Margin="0,6,0,0" />
+                </StackPanel>
+              </DockPanel>
+            </StackPanel>
+          </ScrollViewer>
+        </DockPanel>
+      </DockPanel>
+    </Border>
+  </Grid>
+</UserControl>

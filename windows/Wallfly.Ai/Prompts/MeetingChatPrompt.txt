@@ -1,0 +1,6 @@
+Answer the user's question about this meeting. The conversation block holds the earlier questions and answers of this chat, oldest first; use it to understand follow-up questions, but take facts only from the typed notes and the transcript.
+<meeting-title>{{TITLE}}</meeting-title>
+<typed-notes>{{TYPED_NOTES}}</typed-notes>
+<transcript>{{TRANSCRIPT}}</transcript>
+<conversation>{{CONVERSATION}}</conversation>
+<question>{{QUESTION}}</question>

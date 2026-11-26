@@ -1,0 +1,88 @@
+<UserControl x:Class="Wallfly.App.Views.TranscriptChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="clr-namespace:Wallfly.App"
+             xmlns:controls="clr-namespace:Wallfly.App.Controls">
+  <UserControl.Resources>
+    <controls:VisibleWhen x:Key="VisibleWhen" />
+  </UserControl.Resources>
+  <DockPanel>
+    <DockPanel DockPanel.Dock="Top" Margin="23,0,23,12" Visibility="{Binding HasGaps, Converter={StaticResource VisibleWhen}}">
+      <controls:Icon DockPanel.Dock="Left" Kind="Warning" Size="12" Foreground="{StaticResource Accent}" Margin="0,1,7,0" VerticalAlignment="Top" />
+      <TextBlock Text="{x:Static app:Strings.TranscriptGaps}" FontSize="12" Foreground="{StaticResource Accent}" TextWrapping="Wrap" />
+    </DockPanel>
+    <TextBlock DockPanel.Dock="Top" Text="{Binding SpeakerStatus}" Visibility="{Binding SpeakerStatus, Converter={StaticResource VisibleWhen}}" FontSize="12" Foreground="{StaticResource Muted}"
+               TextTrimming="CharacterEllipsis" Margin="23,0,23,12" AutomationProperties.AutomationId="TeamsSpeakerStatus" />
+    <!-- Speaker matching: spinner + "Matching speakers… 40%" / "Waiting for speaker matching…", or "Speaker matching failed · …" -->
+    <DockPanel DockPanel.Dock="Top" Margin="23,0,23,12" Visibility="{Binding DiarizationStatus, Converter={StaticResource VisibleWhen}}">
+      <controls:Spinner DockPanel.Dock="Left" Size="11" Margin="0,0,7,0" VerticalAlignment="Center" Visibility="{Binding IsMatchingSpeakers, Converter={StaticResource VisibleWhen}}" />
+      <TextBlock Text="{Binding DiarizationStatus}" FontSize="12" Foreground="{StaticResource Muted}" TextWrapping="Wrap" MaxHeight="36" TextTrimming="CharacterEllipsis"
+                 AutomationProperties.AutomationId="DiarizationStatus" />
+    </DockPanel>
+    <Rectangle DockPanel.Dock="Top" Height="1" Fill="{StaticResource Line}" Opacity="0.7" />
+
+    <Grid>
+      <ListBox x:Name="Turns" ItemsSource="{Binding Turns}" ItemContainerStyle="{StaticResource BareListBoxItem}" Background="Transparent" BorderThickness="0"
+               Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="True"
+               VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel"
+               Visibility="{Binding IsEmpty, Converter={StaticResource VisibleWhen}, ConverterParameter=not}">
+        <ListBox.Template>
+          <ControlTemplate TargetType="ListBox">
+            <ScrollViewer x:Name="Scroller" Focusable="False" CanContentScroll="True" Padding="23,18,23,18"><ItemsPresenter /></ScrollViewer>
+          </ControlTemplate>
+        </ListBox.Template>
+        <ListBox.ItemsPanel><ItemsPanelTemplate><VirtualizingStackPanel /></ItemsPanelTemplate></ListBox.ItemsPanel>
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <StackPanel Margin="{Binding TopSpacing, Converter={x:Static controls:TopMargin.Instance}}">
+              <Button Style="{StaticResource PlainButton}" HorizontalAlignment="Left" Padding="4,2" Margin="0,0,0,4" ToolTip="{x:Static app:Strings.SpeakerMenuHint}"
+                      Visibility="{Binding ShowsSpeaker, Converter={StaticResource VisibleWhen}}" Click="Speaker_Click">
+                <StackPanel Orientation="Horizontal">
+                  <Ellipse Width="6" Height="6" Fill="{Binding SpeakerColor}" Margin="0,0,5,0" VerticalAlignment="Center" />
+                  <TextBlock Text="{Binding SpeakerName}" Foreground="{Binding SpeakerColor}" FontSize="11" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+              </Button>
+              <controls:BubbleRow Trailing="{Binding IsMe}">
+                <Border Background="{Binding Background}" Padding="13,9">
+                  <Border.Style>
+                    <Style TargetType="Border">
+                      <Setter Property="CornerRadius" Value="4,14,14,14" />
+                      <Style.Triggers><DataTrigger Binding="{Binding IsMe}" Value="True"><Setter Property="CornerRadius" Value="14,14,4,14" /></DataTrigger></Style.Triggers>
+                    </Style>
+                  </Border.Style>
+                  <StackPanel>
+                    <TextBlock Text="{Binding Text}" FontSize="13" TextWrapping="Wrap" LineHeight="18" Foreground="{StaticResource Ink}" />
+                    <TextBlock Text="{Binding InterimText}" FontSize="11" Foreground="{StaticResource Muted}" Margin="0,4,0,0" Visibility="{Binding ShowsInterim, Converter={StaticResource VisibleWhen}}" />
+                  </StackPanel>
+                </Border>
+              </controls:BubbleRow>
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+
+      <ScrollViewer VerticalScrollBarVisibility="Auto" Visibility="{Binding IsEmpty, Converter={StaticResource VisibleWhen}}">
+        <StackPanel Margin="22" HorizontalAlignment="Center">
+          <controls:Icon Kind="Waveform" Size="26" Foreground="{StaticResource Accent}" Opacity="0.65" HorizontalAlignment="Center" StrokeWidth="1.2" />
+          <TextBlock Text="{Binding EmptyTitle}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="17" HorizontalAlignment="Center" Margin="0,12,0,0" />
+          <TextBlock Text="{Binding EmptyDetail}" FontSize="12" Foreground="{StaticResource Muted}" TextAlignment="Center" TextWrapping="Wrap" LineHeight="17" Margin="0,12,0,0" />
+        </StackPanel>
+      </ScrollViewer>
+
+      <Button VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,12" Command="{Binding LatestCommand}" Visibility="{Binding ShowLatest, Converter={StaticResource VisibleWhen}}"
+              ToolTip="{x:Static app:Strings.LatestHint}" AutomationProperties.Name="{x:Static app:Strings.LatestHint}" Cursor="Hand">
+        <Button.Template>
+          <ControlTemplate TargetType="Button">
+            <Border Background="{StaticResource Paper}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="14" Padding="12,6">
+              <Border.Effect><DropShadowEffect BlurRadius="6" ShadowDepth="2" Opacity="0.08" /></Border.Effect>
+              <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Static app:Strings.Latest}" FontSize="12" FontWeight="SemiBold" />
+                <controls:Icon Kind="ArrowDown" Size="11" Margin="6,0,0,0" VerticalAlignment="Center" />
+              </StackPanel>
+            </Border>
+          </ControlTemplate>
+        </Button.Template>
+      </Button>
+    </Grid>
+  </DockPanel>
+</UserControl>

@@ -1,0 +1,43 @@
+<UserControl x:Class="Wallfly.App.Views.LiveTranscriptBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="clr-namespace:Wallfly.App"
+             xmlns:views="clr-namespace:Wallfly.App.Views"
+             xmlns:controls="clr-namespace:Wallfly.App.Controls">
+  <UserControl.Resources>
+    <controls:VisibleWhen x:Key="VisibleWhen" />
+  </UserControl.Resources>
+  <Border x:Name="Box" Background="{StaticResource Paper}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="22" Height="{Binding TranscriptBoxHeight}" Margin="25,10,25,0" ClipToBounds="False">
+    <Grid>
+      <DockPanel Margin="0,0,0,8">
+        <DockPanel DockPanel.Dock="Top" Margin="23,14,14,12">
+          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+            <Border Background="{StaticResource Gray100}" CornerRadius="10" Padding="7,4" Margin="0,0,8,0" VerticalAlignment="Center" Visibility="{Binding IsLive, Converter={StaticResource VisibleWhen}}">
+              <TextBlock Text="{x:Static app:Strings.LivePill}" Foreground="{StaticResource Accent}" FontSize="12" FontWeight="Bold" />
+            </Border>
+            <Button Style="{StaticResource IconButton}" Command="{Binding Transcript.CopyCommand}" ToolTip="{x:Static app:Strings.CopyTranscript}" AutomationProperties.Name="{x:Static app:Strings.CopyTranscript}">
+              <StackPanel Orientation="Horizontal">
+                <controls:Icon Kind="Copy" Size="13" />
+                <TextBlock Text="{x:Static app:Strings.Copied}" FontSize="12" Margin="5,0,0,0" Visibility="{Binding Transcript.Copied, Converter={StaticResource VisibleWhen}}" />
+              </StackPanel>
+            </Button>
+            <Button Style="{StaticResource IconButton}" Command="{Binding CloseTranscriptBoxCommand}" MinWidth="32" MinHeight="32" ToolTip="{x:Static app:Strings.CollapseTranscript}" AutomationProperties.Name="{x:Static app:Strings.HideTranscript}">
+              <controls:Icon Kind="Minus" Size="13" />
+            </Button>
+          </StackPanel>
+          <TextBlock Text="{x:Static app:Strings.TabTranscript}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="17" VerticalAlignment="Center" />
+        </DockPanel>
+        <views:TranscriptChatView DataContext="{Binding Transcript}" />
+      </DockPanel>
+      <!-- Grip: drag changes the height, double click returns to the automatic height. -->
+      <Thumb x:Name="Grip" Height="10" VerticalAlignment="Top" Cursor="SizeNS" ToolTip="{x:Static app:Strings.ResizeTranscript}" AutomationProperties.Name="{x:Static app:Strings.ResizeTranscript}"
+             DragStarted="Grip_DragStarted" DragDelta="Grip_DragDelta" MouseDoubleClick="Grip_MouseDoubleClick">
+        <Thumb.Template>
+          <ControlTemplate TargetType="Thumb">
+            <Border Background="Transparent"><Border Width="36" Height="4" CornerRadius="2" Background="{StaticResource Hairline}" VerticalAlignment="Center" /></Border>
+          </ControlTemplate>
+        </Thumb.Template>
+      </Thumb>
+    </Grid>
+  </Border>
+</UserControl>

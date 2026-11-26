@@ -1,0 +1,125 @@
+{
+  "$comment": "Wallfly Teams UI Automation selectors (shipped default). Sources: macOS Wallfly 1.13.0 (TeamsStructure.swift, TeamsSpeakerWatcher.swift; Teams for macOS 26261, AX DOM identifiers/classes). Override: %LOCALAPPDATA%\\Wallfly\\teams-selectors.json (hot-reloaded). Top-level keys replace these values; the sections properties/limits/speakingTexts/speakingGuard/selfMarkers/nameStrip/compactLayout merge key by key; a key ending in '+' appends to a list. Property names in matchers are logical (id/class/text/role) and resolved through 'properties'. Not yet verified in a live Windows Teams call.",
+  "schemaVersion": 1,
+  "processNames": [ "ms-teams.exe" ],
+  "webViewProcessNames": [ "msedgewebview2.exe" ],
+  "micProcessNames": [ "ms-teams.exe", "ms-teams_modulehost.exe", "msteamsvdi.exe" ],
+  "windowClasses": [ "TeamsWebView" ],
+  "readMinimizedWindows": false,
+  "rejectMainWindows": true,
+  "properties": {
+    "id": "AutomationId",
+    "class": "ClassName",
+    "text": "Name",
+    "role": "AriaRole"
+  },
+  "limits": {
+    "budgetMilliseconds": 220,
+    "diagnosticBudgetMilliseconds": 1000,
+    "maxNodes": 2200,
+    "maxDepth": 36,
+    "maxWindows": 8,
+    "maxProcesses": 4,
+    "perElementMilliseconds": 50,
+    "connectionTimeoutMilliseconds": 100,
+    "transactionTimeoutMilliseconds": 220,
+    "initializingSeconds": 3,
+    "stalledWindowSeconds": 30,
+    "traversal": "subtree"
+  },
+  "webAreaMarkers": [
+    { "controlTypes": [ "Document" ], "note": "Chromium exposes the web root as a Document (measured on Edge/Electron windows)." }
+  ],
+  "excludedControlTypes": [ "Edit" ],
+  "excludedMarkers": [
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "chat-pane" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "chatpane" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "message-pane" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "messagepane" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "chat-message" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "conversation-message" }
+  ],
+  "leaveButtonMarkers": [
+    { "controlTypes": [ "Button", "SplitButton" ], "property": "id", "match": "equals", "value": "hangup-button" },
+    { "controlTypes": [ "Button", "SplitButton" ], "property": "id", "match": "contains", "ignoreCase": true, "value": "hangup" },
+    { "controlTypes": [ "Button", "SplitButton" ], "property": "id", "match": "contains", "ignoreCase": true, "value": "hang-up" },
+    { "controlTypes": [ "Button", "SplitButton" ], "property": "id", "match": "contains", "ignoreCase": true, "value": "hang_up" },
+    { "controlTypes": [ "Button", "SplitButton" ], "property": "id", "match": "contains", "ignoreCase": true, "value": "leave-call" },
+    { "controlTypes": [ "Button", "SplitButton" ], "property": "id", "match": "contains", "ignoreCase": true, "value": "leavecall" },
+    { "controlTypes": [ "Button", "SplitButton" ], "property": "id", "match": "contains", "ignoreCase": true, "value": "leave-meeting" },
+    { "controlTypes": [ "Button", "SplitButton" ], "property": "id", "match": "contains", "ignoreCase": true, "value": "leavemeeting" }
+  ],
+  "mainWindowMarkers": [
+    { "controlTypes": [ "TabItem" ], "property": "id", "match": "startsWith", "value": "com.microsoft.chattabs." },
+    { "property": "id", "match": "equals", "value": "addTabButton" }
+  ],
+  "meetingMarkers": [
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "hangup" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "hang-up" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "leave-call" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "calling-screen" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "meeting-stage" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "call-screen" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "meeting-window" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "callingbuttons" },
+    { "property": "id", "match": "equals", "value": "call-monitor-title-id" },
+    { "property": "class", "match": "hasToken", "value": "vdi-occlusion" },
+    { "property": "class", "match": "contains", "value": "vdi-frame-occlusion" }
+  ],
+  "tileMarkers": [
+    {
+      "controlTypes": [ "MenuItem" ], "property": "class", "match": "startsWith", "value": "fui-",
+      "and": { "property": "text", "match": "contains", "value": ", " }
+    },
+    { "controlTypes": [ "MenuItem", "Image" ], "hasDescendant": { "property": "class", "match": "hasToken", "value": "vdi-occlusion" } },
+    { "controlTypes": [ "MenuItem", "Image" ], "hasDescendant": { "property": "class", "match": "contains", "value": "vdi-frame-occlusion" } },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "participant-tile" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "participanttile" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "video-tile" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "videotile" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "self-preview" }
+  ],
+  "vdiClasses": [ "vdi-occlusion", "vdi-frame-occlusion" ],
+  "nameMarkers": [
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "participant-name" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "participantname" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "display-name" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "displayname" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "name-text" },
+    { "property": "id", "match": "contains", "ignoreCase": true, "value": "nametext" }
+  ],
+  "nameTextClasses": [ "vdi-occlusion" ],
+  "nameTextControlTypes": [ "Text" ],
+  "speakingMarkers": [
+    { "property": "class", "match": "contains", "value": "vdi-frame-occlusion", "note": "Group on Windows; same class token as on macOS" }
+  ],
+  "speakingClasses": [ "speaking", "is-speaking", "isspeaking", "active-speaker", "speaker-active" ],
+  "speakingIdSuffix": [ "-speaking-indicator" ],
+  "speakingTexts": {
+    "equals": [ "speaking", "is speaking", "you are speaking", "spricht", "spricht gerade", "sie sprechen", "du sprichst", "aktiver sprecher", "aktive sprecherin" ],
+    "suffixes": [ " is speaking", ", speaking", " spricht", " spricht gerade", ", aktiver sprecher", ", aktive sprecherin" ]
+  },
+  "speakingGuard": {
+    "excludedControlTypes": [ "MenuItem" ],
+    "tileOnlyControlTypes": [ "Button" ]
+  },
+  "selfMarkers": {
+    "labelPrefixes": [ "myself video, ", "mein video, " ],
+    "idContains": [ "self-preview", "self-tile", "selfpreview" ],
+    "textContains": [ "(you)", "(sie)", "(ich)", "you are speaking", "sie sprechen", "du sprichst" ],
+    "vdiTileControlTypes": [ "Image" ]
+  },
+  "nameStrip": {
+    "selfLabelPrefixes": [ "Myself video, ", "Mein Video, " ],
+    "suffixes": [ " (You)", " (you)", " (Sie)", " (Ich)", " (Guest)", " (Gast)", " is speaking", " spricht gerade", " spricht" ],
+    "controlOnly": [ "context menu is available", "has context menu", "kontextmenü ist verfügbar", "hat ein kontextmenü", "myself video", "mein video", "you are speaking", "sie sprechen", "du sprichst", "speaking", "spricht", "aktiver sprecher", "aktive sprecherin" ],
+    "maxLength": 160
+  },
+  "compactLayout": {
+    "windowMarkers": [ { "property": "id", "match": "equals", "value": "call-monitor-title-id" } ],
+    "noteMarkers": [ { "controlTypes": [ "Group" ], "property": "role", "match": "equals", "value": "note" } ],
+    "textControlTypes": [ "Text" ],
+    "skipNotesContaining": [ "MenuItem" ],
+    "selfTexts": [ "You are speaking" ]
+  }
+}

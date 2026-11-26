@@ -1,0 +1,146 @@
+<Window x:Class="Wallfly.App.Shell.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="clr-namespace:Wallfly.App"
+        xmlns:views="clr-namespace:Wallfly.App.Views"
+        xmlns:controls="clr-namespace:Wallfly.App.Controls"
+        xmlns:shell="clr-namespace:Wallfly.App.Shell"
+        Style="{StaticResource AppWindow}" Title="{x:Static app:Strings.AppName}" shell:WindowFrame.CaptionHeight="62"
+        Width="1340" Height="850" MinWidth="360" MinHeight="520" WindowStartupLocation="CenterScreen">
+  <Window.Resources>
+    <controls:VisibleWhen x:Key="VisibleWhen" />
+    <controls:EnumIs x:Key="EnumIs" />
+    <Style x:Key="ColumnSplitter" TargetType="GridSplitter">
+      <Setter Property="Width" Value="5" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="VerticalAlignment" Value="Stretch" />
+      <Setter Property="ResizeBehavior" Value="PreviousAndNext" />
+      <Setter Property="Focusable" Value="False" />
+      <Setter Property="Background" Value="Transparent" />
+      <!-- The splitters reach into the title band; they stay draggable as splitters there. -->
+      <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="GridSplitter">
+            <Border Background="{TemplateBinding Background}"><Rectangle Width="1" Fill="{StaticResource Line}" /></Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Window.Resources>
+  <Window.InputBindings>
+    <KeyBinding Modifiers="Control" Key="N" Command="{Binding NewNoteCommand}" />
+    <KeyBinding Modifiers="Control" Key="F" Command="{Binding FocusSearchCommand}" />
+    <KeyBinding Modifiers="Control" Key="OemComma" Command="{Binding OpenSettingsCommand}" CommandParameter="Recording" />
+    <KeyBinding Modifiers="Control" Key="Q" Command="{Binding QuitCommand}" />
+    <KeyBinding Modifiers="Control+Shift" Key="R" Command="{Binding StartRecordingCommand}" />
+    <KeyBinding Modifiers="Control+Shift" Key="E" Command="{Binding StopRecordingCommand}" />
+    <KeyBinding Modifiers="Control+Shift" Key="A" Command="{Binding EnhanceCommand}" />
+    <KeyBinding Modifiers="Control+Shift" Key="T" Command="{Binding ToggleTranscriptCommand}" />
+    <KeyBinding Modifiers="Control" Key="D1" Command="{Binding SelectTabCommand}" CommandParameter="Notes" />
+    <KeyBinding Modifiers="Control" Key="D2" Command="{Binding SelectTabCommand}" CommandParameter="Enhanced" />
+    <KeyBinding Modifiers="Control" Key="D3" Command="{Binding SelectTabCommand}" CommandParameter="Transcript" />
+    <KeyBinding Modifiers="Control" Key="NumPad1" Command="{Binding SelectTabCommand}" CommandParameter="Notes" />
+    <KeyBinding Modifiers="Control" Key="NumPad2" Command="{Binding SelectTabCommand}" CommandParameter="Enhanced" />
+    <KeyBinding Modifiers="Control" Key="NumPad3" Command="{Binding SelectTabCommand}" CommandParameter="Transcript" />
+    <KeyBinding Key="Escape" Command="{Binding EscapeCommand}" />
+  </Window.InputBindings>
+  <Grid x:Name="Root">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition x:Name="SidebarColumn" Width="200" MinWidth="180" MaxWidth="260" />
+      <ColumnDefinition x:Name="SidebarSplitColumn" Width="Auto" />
+      <ColumnDefinition x:Name="ListColumn" Width="320" MinWidth="280" MaxWidth="440" />
+      <ColumnDefinition x:Name="ListSplitColumn" Width="Auto" />
+      <ColumnDefinition x:Name="DetailColumn" Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <views:SidebarView x:Name="Sidebar" Grid.Column="0" />
+    <GridSplitter x:Name="SidebarSplitter" Grid.Column="1" Style="{StaticResource ColumnSplitter}" />
+    <views:MeetingListView x:Name="List" Grid.Column="2" />
+    <!-- Paper between list and detail (the window itself is transparent for Mica). -->
+    <GridSplitter x:Name="ListSplitter" Grid.Column="3" Style="{StaticResource ColumnSplitter}" Background="{StaticResource Paper}" />
+
+    <DockPanel x:Name="Detail" Grid.Column="4">
+      <!-- Toolbar (62 px) = the title band: draggable where empty, the caption buttons sit over the spacer at the right. -->
+      <DockPanel DockPanel.Dock="Top" Height="62" Background="{DynamicResource ChromeBand}">
+        <FrameworkElement DockPanel.Dock="Right" Width="{Binding (shell:WindowFrame.CaptionButtonsWidth), RelativeSource={RelativeSource AncestorType=Window}}" />
+        <DockPanel Margin="25,0">
+          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+            <ToggleButton Style="{StaticResource ToolbarToggle}" WindowChrome.IsHitTestVisibleInChrome="True" IsChecked="{Binding PresentationMode}" Visibility="{Binding ShowPresentationToggle, Converter={StaticResource VisibleWhen}}"
+                          ToolTip="{x:Static app:Strings.PresentationModeHint}" AutomationProperties.Name="{x:Static app:Strings.PresentationMode}" Margin="0,0,10,0">
+              <StackPanel Orientation="Horizontal">
+                <controls:Icon Kind="Presentation" Size="13" Margin="0,0,6,0" VerticalAlignment="Center" />
+                <TextBlock x:Name="PresentationLabel" Text="{x:Static app:Strings.PresentationMode}" />
+              </StackPanel>
+            </ToggleButton>
+            <Button x:Name="MoreButton" Style="{StaticResource IconButton}" Foreground="{StaticResource Ink}" Click="More_Click" WindowChrome.IsHitTestVisibleInChrome="True" Visibility="{Binding ShowMoreMenu, Converter={StaticResource VisibleWhen}}"
+                    ToolTip="{x:Static app:Strings.MoreActions}" AutomationProperties.Name="{x:Static app:Strings.MoreActions}">
+              <controls:Icon Kind="More" Size="15" />
+            </Button>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <!-- Editor: "Back to preview" and the focus-mode toggle -->
+            <StackPanel Orientation="Horizontal" Visibility="{Binding IsEditor, Converter={StaticResource VisibleWhen}}">
+              <Button Style="{StaticResource PlainButton}" Command="{Binding BackToPreviewCommand}" Padding="4,4,8,4" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="{x:Static app:Strings.BackToPreview}" AutomationProperties.Name="{x:Static app:Strings.BackToPreview}">
+                <StackPanel Orientation="Horizontal">
+                  <controls:Icon Kind="ChevronLeft" Size="12" Margin="0,0,6,0" VerticalAlignment="Center" />
+                  <TextBlock x:Name="BackLabel" Text="{x:Static app:Strings.BackToPreview}" FontSize="13" />
+                </StackPanel>
+              </Button>
+              <Button Style="{StaticResource IconButton}" Foreground="{StaticResource Ink}" Command="{Binding ToggleFocusModeCommand}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="{Binding FocusHint}" AutomationProperties.Name="{Binding FocusHint}" Margin="10,0,0,0">
+                <controls:Icon Kind="{Binding FocusIcon}" Size="14" />
+              </Button>
+            </StackPanel>
+            <Button Style="{StaticResource PlainButton}" Command="{Binding BackToListCommand}" Padding="4,4,8,4" Visibility="{Binding ShowNarrowBack, Converter={StaticResource VisibleWhen}}"
+                    ToolTip="{x:Static app:Strings.BackToMeetings}" AutomationProperties.Name="{x:Static app:Strings.BackToMeetings}" WindowChrome.IsHitTestVisibleInChrome="True">
+              <StackPanel Orientation="Horizontal">
+                <controls:Icon Kind="ChevronLeft" Size="12" Margin="0,0,6,0" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static app:Strings.BackToMeetings}" FontSize="13" />
+              </StackPanel>
+            </Button>
+            <TextBlock Text="{Binding ToolbarCaption}" FontSize="12" Foreground="{StaticResource Muted}" VerticalAlignment="Center" Visibility="{Binding IsEditor, Converter={StaticResource VisibleWhen}, ConverterParameter=not}" />
+          </StackPanel>
+        </DockPanel>
+      </DockPanel>
+      <Rectangle DockPanel.Dock="Top" Height="1" Fill="{StaticResource Line}" />
+
+      <DockPanel Background="{StaticResource Paper}">
+        <views:ErrorBanner DockPanel.Dock="Bottom" />
+
+        <Grid>
+          <!-- Editor in focus mode, the live transcript box, the meeting chat, the recording bar -->
+          <Grid x:Name="EditorHost" MaxWidth="980" Visibility="{Binding DetailMode, Converter={StaticResource EnumIs}, ConverterParameter=Editor}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <views:MeetingEditorView x:Name="Editor" DataContext="{Binding Current}" />
+            <views:LiveTranscriptBox x:Name="TranscriptBox" Grid.Row="1" DataContext="{Binding Current}" Visibility="{Binding IsTranscriptBoxVisible, Converter={StaticResource VisibleWhen}, FallbackValue=Collapsed}" />
+            <!-- "Ask anything" about a finished meeting: outside the tab bodies, so the same on all three tabs. -->
+            <views:MeetingChatPanel x:Name="ChatPanel" Grid.Row="2" DataContext="{Binding Current.Chat}" Visibility="{Binding IsAvailable, Converter={StaticResource VisibleWhen}, FallbackValue=Collapsed}" />
+            <views:RecordingBar x:Name="RecordingBar" Grid.Row="3" />
+          </Grid>
+          <views:TodosView x:Name="Todos" DataContext="{Binding Todos}" Visibility="{Binding DataContext.DetailMode, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource EnumIs}, ConverterParameter=Todos}" />
+          <views:MeetingPreviewView x:Name="Preview" DataContext="{Binding Preview}" Visibility="{Binding DataContext.DetailMode, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource EnumIs}, ConverterParameter=Preview}" />
+          <!-- Start screen: centred mark, heading, one line and "New note" -->
+          <StackPanel x:Name="EmptyState" Margin="28,28,28,60" MaxWidth="380" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding DetailMode, Converter={StaticResource EnumIs}, ConverterParameter=Empty}">
+            <Border Width="52" Height="52" CornerRadius="14" Background="{StaticResource Sidebar}" HorizontalAlignment="Center">
+              <controls:Icon Kind="Waveform" Size="24" Foreground="{StaticResource Accent}" StrokeWidth="1.8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Text="{x:Static app:Strings.EmptyTitle}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="22" TextAlignment="Center" TextWrapping="Wrap" Margin="0,18,0,0" />
+            <TextBlock Text="{Binding EmptyDetailText}" FontSize="14" Foreground="{StaticResource Muted}" TextAlignment="Center" TextWrapping="Wrap" Margin="0,8,0,0" />
+            <Button Style="{StaticResource PrimaryButton}" Command="{Binding NewNoteCommand}" HorizontalAlignment="Center" Padding="16,8" Margin="0,22,0,0"
+                    ToolTip="{x:Static app:Strings.NewNoteShortcut}" AutomationProperties.Name="{x:Static app:Strings.NewNote}">
+              <StackPanel Orientation="Horizontal">
+                <controls:Icon Kind="Add" Size="13" Margin="0,0,8,0" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static app:Strings.NewNote}" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+        </Grid>
+      </DockPanel>
+    </DockPanel>
+  </Grid>
+</Window>

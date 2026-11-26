@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Speaker identity of the Others channel, ported 1:1 from Wallfly 1.13.0 for macOS (SpeakerAttribution.swift,
+       SpeakerFusion.swift, AcousticSpeakerLabels.swift, the pure parts of AcousticDiarization.swift and
+       MeetingStore.swift). Pure data logic: no I/O, no UI, no threads. Core does not reference this project
+       (it references Core), so the wiring lives in the composition root. -->
+  <PropertyGroup>
+    <RootNamespace>Wallfly.Speakers</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Wallfly.Core/Wallfly.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+</Project>

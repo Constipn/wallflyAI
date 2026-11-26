@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Native/WallflyAudioNative.cs mirrors the C ABI with fixed buffers and raw pointers. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- NativeFakeSession and the ABI structs are internal; the tests drive the DLL through them. -->
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+</Project>

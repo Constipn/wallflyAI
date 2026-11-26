@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Offline language detection (Apache-2.0). Only the trigram models are shipped: the detector runs in
+         low-accuracy mode, which never reads the other n-gram files (4.6 MB instead of 71 MB). -->
+    <PackageReference Include="SearchPioneer.Lingua" Version="2.0.0" ExcludeAssets="build;contentFiles" GeneratePathProperty="true" />
+  </ItemGroup>
+  <ItemGroup>
+    <LinguaTrigramModel Include="$(PkgSearchPioneer_Lingua)/contentFiles/any/any/Lingua/LanguageModels/**/trigrams.json.br" />
+    <None Include="@(LinguaTrigramModel)" Link="Lingua/LanguageModels/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Prompts are ported verbatim from Enhancer.swift / TaskExtractor.swift / MeetingTask.swift. -->
+    <EmbeddedResource Include="Prompts/*.txt" LogicalName="Wallfly.Ai.Prompts.%(Filename).txt" />
+  </ItemGroup>
+</Project>

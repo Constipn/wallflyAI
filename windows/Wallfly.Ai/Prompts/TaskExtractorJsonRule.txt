@@ -1,0 +1,1 @@
+Keep JSON field names and status enum values exactly as specified in the schema. Evidence must remain an exact source quote in its original language.

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Local/ChildProcessJob.cs binds the Win32 job-object API with LibraryImport. -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Wallfly.Audio/Wallfly.Audio.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- The chunk pipeline's idle check and the launcher's process seam are internal test hooks. -->
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+</Project>

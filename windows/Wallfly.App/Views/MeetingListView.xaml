@@ -1,0 +1,128 @@
+<UserControl x:Class="Wallfly.App.Views.MeetingListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:app="clr-namespace:Wallfly.App"
+             xmlns:controls="clr-namespace:Wallfly.App.Controls"
+             xmlns:shell="clr-namespace:Wallfly.App.Shell">
+  <UserControl.Resources>
+    <controls:VisibleWhen x:Key="VisibleWhen" />
+  </UserControl.Resources>
+  <!-- The window is transparent for Mica (Shell/WindowFrame.cs): the header and the body paint Paper themselves. When
+       the list is the rightmost column (narrow window), SetCaptionBand turns the header into the title band. -->
+  <DockPanel DataContext="{Binding Library}">
+    <Border x:Name="HeaderBand" DockPanel.Dock="Top" Background="{StaticResource Paper}" BorderBrush="{StaticResource Line}" BorderThickness="0">
+      <DockPanel Margin="20,26,20,16">
+        <FrameworkElement x:Name="CaptionSpacer" DockPanel.Dock="Right" Visibility="Collapsed"
+                          Width="{Binding (shell:WindowFrame.CaptionButtonsWidth), RelativeSource={RelativeSource AncestorType=Window}}" />
+        <TextBlock DockPanel.Dock="Right" Text="{Binding Count}" FontSize="12" Foreground="{StaticResource Muted}" VerticalAlignment="Center" Margin="4,0,0,0" />
+        <TextBlock Text="{Binding HeaderTitle}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="23" TextWrapping="Wrap" MaxHeight="62" TextTrimming="CharacterEllipsis" />
+      </DockPanel>
+    </Border>
+
+    <Border x:Name="Body" Background="{StaticResource Paper}">
+      <DockPanel>
+        <Border x:Name="SearchField" DockPanel.Dock="Top" Background="{StaticResource Sidebar}" CornerRadius="10" BorderThickness="0.5" Padding="10,8" Margin="16,0">
+          <Border.Style>
+            <Style TargetType="Border">
+              <Setter Property="BorderBrush" Value="{StaticResource Line}" />
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding IsKeyboardFocusWithin, RelativeSource={RelativeSource Self}}" Value="True"><Setter Property="BorderBrush" Value="{StaticResource Muted}" /><Setter Property="BorderThickness" Value="1.5" /></DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </Border.Style>
+          <DockPanel>
+            <controls:Icon DockPanel.Dock="Left" Kind="Search" Size="13" Foreground="{StaticResource Muted}" Margin="0,0,8,0" VerticalAlignment="Center" />
+            <Button DockPanel.Dock="Right" Style="{StaticResource IconButton}" Command="{Binding ClearSearchCommand}" MinWidth="20" MinHeight="20" Padding="2"
+                    Visibility="{Binding SearchText, Converter={StaticResource VisibleWhen}}" ToolTip="{x:Static app:Strings.ClearSearch}" AutomationProperties.Name="{x:Static app:Strings.ClearSearch}">
+              <controls:Icon Kind="Close" Size="10" />
+            </Button>
+            <TextBlock DockPanel.Dock="Right" Text="{x:Static app:Strings.SearchShortcut}" FontSize="12" Foreground="{StaticResource Muted}" VerticalAlignment="Center"
+                       Visibility="{Binding SearchText, Converter={StaticResource VisibleWhen}, ConverterParameter=not}" />
+            <Grid>
+              <TextBlock Text="{x:Static app:Strings.SearchMeetings}" Foreground="{StaticResource Muted}" FontSize="14" IsHitTestVisible="False" VerticalAlignment="Center"
+                         Visibility="{Binding SearchText, Converter={StaticResource VisibleWhen}, ConverterParameter=not}" />
+              <TextBox x:Name="SearchBox" Style="{StaticResource PlainTextBox}" FontSize="14" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                       AutomationProperties.Name="{x:Static app:Strings.SearchMeetings}" PreviewKeyDown="Search_PreviewKeyDown" VerticalAlignment="Center" />
+            </Grid>
+          </DockPanel>
+        </Border>
+
+        <StackPanel DockPanel.Dock="Top" Margin="20,12,20,0" Visibility="{Binding HasQuery, Converter={StaticResource VisibleWhen}}">
+          <TextBlock Text="{Binding SearchingInText}" Style="{StaticResource Meta}" />
+          <Button Content="{Binding SearchEverywhereText}" Style="{StaticResource LinkButton}" Command="{Binding ToggleSearchEverywhereCommand}" Margin="0,6,0,0"
+                  Visibility="{Binding CanSearchEverywhere, Converter={StaticResource VisibleWhen}}" />
+          <StackPanel Orientation="Horizontal" Margin="0,6,0,0" Visibility="{Binding IsSearching, Converter={StaticResource VisibleWhen}}">
+            <controls:Spinner Size="12" Margin="0,0,6,0" />
+            <TextBlock Text="{x:Static app:Strings.Searching}" Style="{StaticResource Meta}" />
+          </StackPanel>
+        </StackPanel>
+
+        <Grid Margin="8,16,8,0">
+          <ListBox x:Name="List" ItemsSource="{Binding Rows}" SelectionChanged="List_SelectionChanged" 
+                   Background="Transparent" BorderThickness="0" Padding="0" SelectionMode="Single" AutomationProperties.Name="{x:Static app:Strings.YourMeetings}"
+                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="True"
+                   VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel"
+                   PreviewMouseLeftButtonDown="List_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="List_PreviewMouseLeftButtonUp" PreviewMouseMove="List_PreviewMouseMove"
+                   MouseDoubleClick="List_MouseDoubleClick" KeyDown="List_KeyDown" ContextMenuOpening="List_ContextMenuOpening">
+            <ListBox.Template>
+              <ControlTemplate TargetType="ListBox">
+                <ScrollViewer Focusable="False" Padding="{TemplateBinding Padding}" CanContentScroll="True"><ItemsPresenter /></ScrollViewer>
+              </ControlTemplate>
+            </ListBox.Template>
+            <ListBox.ContextMenu><ContextMenu /></ListBox.ContextMenu>
+            <ListBox.ItemContainerStyle>
+              <!-- 94 px per row plus 70 px per search excerpt (MeetingRowViewModel.Height). -->
+              <Style TargetType="ListBoxItem" BasedOn="{StaticResource MeetingRowItem}">
+                <Setter Property="Height" Value="{Binding Height}" />
+              </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemsPanel><ItemsPanelTemplate><VirtualizingStackPanel /></ItemsPanelTemplate></ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <StackPanel ToolTip="{Binding ToolTip}" AutomationProperties.Name="{Binding AutomationName}" VerticalAlignment="Top">
+                  <StackPanel>
+                    <DockPanel>
+                      <Ellipse DockPanel.Dock="Right" Width="7" Height="7" Fill="{StaticResource Accent}" VerticalAlignment="Top" Margin="6,6,0,0"
+                               Visibility="{Binding IsRecording, Converter={StaticResource VisibleWhen}}" AutomationProperties.Name="{x:Static app:Strings.RecordingInProgress}" />
+                      <TextBlock FontSize="14" FontWeight="Medium" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" LineHeight="19" LineStackingStrategy="BlockLineHeight" MaxHeight="38"
+                                 controls:Highlight.Text="{Binding Title}" controls:Highlight.Query="{Binding Query}" />
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,7,0,0">
+                      <TextBlock Text="{Binding DateText}" FontSize="12" Foreground="{StaticResource Muted}" VerticalAlignment="Center" />
+                      <Border Background="{Binding Folder.Background}" CornerRadius="5" Padding="7,3" Margin="8,0,0,0" ToolTip="{Binding Folder.Name}"
+                              Visibility="{Binding Folder, Converter={StaticResource VisibleWhen}}">
+                        <StackPanel Orientation="Horizontal">
+                          <controls:Icon Kind="{Binding Folder.Icon}" Size="11" Foreground="{Binding Folder.Foreground}" Margin="0,0,5,0" VerticalAlignment="Center" />
+                          <TextBlock Text="{Binding Folder.Name}" Foreground="{Binding Folder.Foreground}" FontSize="12" MaxWidth="130" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                      </Border>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding Snippets}" Margin="0,7,0,0" Focusable="False">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <StackPanel Height="63" Margin="0,0,0,7">
+                            <TextBlock Text="{Binding Label}" FontSize="12" FontWeight="Medium" Foreground="{StaticResource Muted}" />
+                            <TextBlock FontSize="12" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" LineHeight="17" LineStackingStrategy="BlockLineHeight" MaxHeight="34" Margin="0,4,0,0"
+                                       controls:Highlight.Text="{Binding Text}" controls:Highlight.Query="{Binding Query}" />
+                          </StackPanel>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </StackPanel>
+                </StackPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+          <StackPanel Margin="20,12,20,0" VerticalAlignment="Top" Visibility="{Binding ShowEmpty, Converter={StaticResource VisibleWhen}}">
+            <controls:Icon Kind="{Binding EmptyIcon}" Size="25" Foreground="{StaticResource Muted}" HorizontalAlignment="Left" StrokeWidth="1.2" />
+            <TextBlock Text="{Binding EmptyTitle}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="22" Margin="0,12,0,0" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding EmptyDetail}" FontSize="14" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,12,0,0" />
+            <Button Content="{x:Static app:Strings.ResetSearch}" Command="{Binding ClearSearchCommand}" HorizontalAlignment="Left" Margin="0,14,0,0"
+                    Visibility="{Binding HasQuery, Converter={StaticResource VisibleWhen}}" />
+          </StackPanel>
+        </Grid>
+      </DockPanel>
+    </Border>
+  </DockPanel>
+</UserControl>

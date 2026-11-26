@@ -1,0 +1,65 @@
+<Window x:Class="Wallfly.App.Dialogs.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:app="clr-namespace:Wallfly.App"
+        xmlns:dialogs="clr-namespace:Wallfly.App.Dialogs"
+        xmlns:controls="clr-namespace:Wallfly.App.Controls"
+        Style="{StaticResource AppWindow}" Title="{x:Static app:Strings.SettingsTitle}"
+        Width="650" Height="680" MinWidth="560" MinHeight="480" ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
+  <Window.Resources>
+    <controls:VisibleWhen x:Key="VisibleWhen" />
+    <controls:EnumIs x:Key="EnumIs" />
+    <controls:Not x:Key="Not" />
+  </Window.Resources>
+  <DockPanel>
+    <!-- Header: title, the three areas. The window's close button (top right) saves like "Done" (OnClosing). -->
+    <StackPanel DockPanel.Dock="Top">
+      <TextBlock Text="{x:Static app:Strings.SettingsTitle}" FontFamily="{StaticResource DisplayFont}" FontWeight="SemiBold" FontSize="25" Margin="24,20,138,14" TextTrimming="CharacterEllipsis" />
+      <Border Background="{StaticResource Gray100}" CornerRadius="8" Padding="2" Margin="24,0,24,16">
+        <UniformGrid Rows="1">
+          <RadioButton Style="{StaticResource SegmentRadio}" GroupName="Area" Content="{x:Static app:Strings.AreaRecording}" IsChecked="{Binding Area, Converter={StaticResource EnumIs}, ConverterParameter=Recording}" />
+          <RadioButton Style="{StaticResource SegmentRadio}" GroupName="Area" Content="{x:Static app:Strings.AreaAiLanguage}" IsChecked="{Binding Area, Converter={StaticResource EnumIs}, ConverterParameter=AiLanguage}" />
+          <RadioButton Style="{StaticResource SegmentRadio}" GroupName="Area" Content="{x:Static app:Strings.AreaStorage}" IsChecked="{Binding Area, Converter={StaticResource EnumIs}, ConverterParameter=Storage}" />
+        </UniformGrid>
+      </Border>
+      <Rectangle Height="1" Fill="{StaticResource Line}" />
+    </StackPanel>
+
+    <!-- Footer: "Open setup…", busy note, "Done" -->
+    <Border DockPanel.Dock="Bottom" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Padding="20,14">
+      <DockPanel>
+        <Button DockPanel.Dock="Right" Content="{x:Static app:Strings.Done}" Style="{StaticResource PrimaryButton}" Command="{Binding DoneCommand}" IsDefault="True" MinWidth="80" />
+        <Button DockPanel.Dock="Left" Content="{x:Static app:Strings.OpenSetup}" Command="{Binding OpenSetupCommand}" Margin="0,0,12,0" />
+        <TextBlock Text="{Binding BusyNote}" Style="{StaticResource Meta}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+      </DockPanel>
+    </Border>
+
+    <!-- While recording: switch microphone, Deepgram key, "Reconnect" -->
+    <Border DockPanel.Dock="Bottom" BorderBrush="{StaticResource Line}" BorderThickness="0,1,0,0" Padding="20,12" Visibility="{Binding ShowLiveControls, Converter={StaticResource VisibleWhen}}">
+      <StackPanel>
+        <DockPanel>
+          <ComboBox DockPanel.Dock="Right" Width="300" ItemsSource="{Binding Microphones}" SelectedItem="{Binding LiveMicrophone}" DisplayMemberPath="Label"
+                    AutomationProperties.Name="{x:Static app:Strings.SwitchMicrophone}" AutomationProperties.AutomationId="LiveMicrophone" />
+          <TextBlock Text="{x:Static app:Strings.SwitchMicrophone}" VerticalAlignment="Center" FontSize="13" />
+        </DockPanel>
+        <TextBlock Text="{Binding LiveMicrophoneError}" Visibility="{Binding LiveMicrophoneError, Converter={StaticResource VisibleWhen}}" Foreground="{StaticResource Accent}" FontSize="12" TextWrapping="Wrap" Margin="0,6,0,0" />
+        <DockPanel Margin="0,8,0,0" Visibility="{Binding ShowLiveDeepgram, Converter={StaticResource VisibleWhen}}">
+          <Button DockPanel.Dock="Right" Content="{x:Static app:Strings.Reconnect}" Command="{Binding ReconnectCommand}" ToolTip="{x:Static app:Strings.ReconnectHint}" Margin="8,0,0,0" />
+          <PasswordBox DockPanel.Dock="Right" Width="210" controls:Secure.Password="{Binding LiveDeepgramKey, Mode=TwoWay}" AutomationProperties.Name="{x:Static app:Strings.UpdateDeepgramKey}" />
+          <TextBlock Text="{x:Static app:Strings.UpdateDeepgramKey}" VerticalAlignment="Center" FontSize="13" />
+        </DockPanel>
+      </StackPanel>
+    </Border>
+
+    <TextBlock DockPanel.Dock="Bottom" Text="{Binding SaveError}" Visibility="{Binding SaveError, Converter={StaticResource VisibleWhen}}" Foreground="{StaticResource Accent}" FontSize="12" TextWrapping="Wrap" Margin="24,8,24,8" />
+
+    <!-- The selected area -->
+    <ScrollViewer x:Name="Scroller" Background="{StaticResource Sidebar}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <Grid Margin="24,18,24,24" IsEnabled="{Binding CanEdit}">
+        <dialogs:RecordingSettingsView x:Name="RecordingArea" />
+        <dialogs:AiLanguageSettingsView x:Name="AiArea" />
+        <dialogs:StorageSettingsView x:Name="StorageArea" />
+      </Grid>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

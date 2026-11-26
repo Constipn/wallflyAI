@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- The composition of the finished building blocks behind the hook interfaces of Wallfly.Core (LibraryServiceHooks):
+       live Teams speaker names (Wallfly.Teams + Wallfly.Speakers), speaker matching after a stop (Wallfly.Diarization),
+       speaker editing, and the Teams call source for the automatic meeting audio and the auto-stop. Core stays free of
+       these projects; the app passes IntegrationServices.CreateDefault() to MeetingLibraryService. -->
+  <PropertyGroup>
+    <RootNamespace>Wallfly.Integration</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../Wallfly.Core/Wallfly.Core.csproj" />
+    <ProjectReference Include="../Wallfly.Speakers/Wallfly.Speakers.csproj" />
+    <ProjectReference Include="../Wallfly.Diarization/Wallfly.Diarization.csproj" />
+    <ProjectReference Include="../Wallfly.Teams/Wallfly.Teams.csproj" />
+    <ProjectReference Include="../Wallfly.Transcription/Wallfly.Transcription.csproj" />
+    <ProjectReference Include="../Wallfly.Audio/Wallfly.Audio.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+</Project>

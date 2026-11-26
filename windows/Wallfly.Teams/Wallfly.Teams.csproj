@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Shared by Wallfly (main app) and Wallfly Detector: Teams call detection over UI Automation, the detection
+       policies and the file/pipe protocol between the two processes. -->
+  <PropertyGroup>
+    <RootNamespace>Wallfly.Teams</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Pinned: FlaUI.UIA3 creates CUIAutomation8 and brings the Interop.UIAutomationClient COM interop used on the hot path. -->
+    <PackageReference Include="FlaUI.UIA3" Version="5.0.0" />
+    <PackageReference Include="Interop.UIAutomationClient" Version="10.19041.0" />
+    <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
+    <PackageReference Include="Microsoft.Win32.SystemEvents" Version="10.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="teams-selectors.json" LogicalName="Wallfly.Teams.teams-selectors.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Wallfly.Tests" />
+  </ItemGroup>
+</Project>
