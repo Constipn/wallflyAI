@@ -8,7 +8,7 @@ Record, transcribe and summarize meetings with local models or your preferred cl
 
 [![License: MIT](https://img.shields.io/github/license/Constipn/wallflyAI)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/Constipn/wallflyAI)](https://github.com/Constipn/wallflyAI/releases/latest)
-[![Platforms: macOS 26+ (Apple Silicon) · Windows (coming soon)](https://img.shields.io/badge/platforms-macOS%2026%2B%20%28Apple%20Silicon%29%20%C2%B7%20Windows%20%28coming%20soon%29-lightgrey)](#download)
+[![Platforms: macOS 26+ (Apple Silicon) · Windows 10/11 (x64, preview)](https://img.shields.io/badge/platforms-macOS%2026%2B%20%28Apple%20Silicon%29%20%C2%B7%20Windows%2010%2F11%20%28x64%2C%20preview%29-lightgrey)](#download)
 
 [**Download for Mac**](https://github.com/Constipn/wallflyAI/releases/latest/download/Wallfly.dmg) · <!-- windows-download --><a href="https://github.com/Constipn/wallflyAI/releases/download/windows-v0.1.0/Wallfly-Setup.exe" title="Wallfly for Windows 0.1.0. Not code-signed yet: if SmartScreen warns, click More info, then Run anyway."><b>Download for Windows</b></a><!-- /windows-download --> · [Report a bug](https://github.com/Constipn/wallflyAI/issues)
 
@@ -24,7 +24,7 @@ You choose the model, where it runs and what you spend. Transcription and note e
 
 | | Fully local | Your cloud provider |
 |---|---|---|
-| Transcription | Whisper Large V3 Turbo via [OpenWhispr](https://github.com/OpenWhispr/openwhispr), installed separately | Deepgram Nova-3 or OpenAI |
+| Transcription | Whisper Large V3 Turbo: on the Mac via [OpenWhispr](https://github.com/OpenWhispr/openwhispr), installed separately; on Windows included | Deepgram Nova-3 or OpenAI |
 | Summaries and Enhanced Notes | Your local model through an OpenAI-compatible API | OpenAI, Anthropic (Claude), or another OpenAI-compatible API |
 | Processing | On your computer; works offline after setup and model downloads | Required audio or text goes to your chosen provider |
 | Cost | No API fees | Usage billed directly by your provider |
@@ -84,10 +84,17 @@ Permissions, data folder and more Mac details: [macos/README.md](macos/README.md
 
 <!-- windows-download --><a href="https://github.com/Constipn/wallflyAI/releases/download/windows-v0.1.0/Wallfly-Setup.exe" title="Wallfly for Windows 0.1.0. Not code-signed yet: if SmartScreen warns, click More info, then Run anyway."><b>Download for Windows</b></a><!-- /windows-download -->
 
+Preview release. Requires Windows 10 version 1809 or newer, or Windows 11, 64-bit (x64).
+
+1. Download `Wallfly-Setup.exe` from the [Windows release](https://github.com/Constipn/wallflyAI/releases?q=windows-v) and run it. It installs for your user only and needs no administrator rights.
+2. The installer is not code-signed yet, so Windows SmartScreen may warn. Click **More info**, then **Run anyway**.
+
+Install details, data folder and more Windows details: [windows/README.md](windows/README.md).
+
 ## Build from source
 
 - **Mac:** see [macos/README.md](macos/README.md#build-from-source).
-- **Windows:** the source will live in `windows/` with its own README once the Windows version is published.
+- **Windows:** see [windows/README.md](windows/README.md#build-from-source).
 
 ## Privacy
 
@@ -96,20 +103,20 @@ Permissions, data folder and more Mac details: [macos/README.md](macos/README.md
   - Audio for transcription goes to Deepgram or OpenAI. With local Whisper, audio stays on your computer.
   - Your notes and the transcript go to the AI provider when you expand them. Turn this off, or use a local OpenAI-compatible server.
   - The speaker-recognition models are downloaded once from Hugging Face.
-- **Fully local:** local Whisper plus a local OpenAI-compatible server (or no AI notes) keeps meeting processing on your computer. Install OpenWhispr separately and download the required models before working offline.
+- **Fully local:** local Whisper plus a local OpenAI-compatible server (or no AI notes) keeps meeting processing on your computer. On the Mac, install OpenWhispr separately and download the required models before working offline; on Windows, local Whisper and its models are included.
 - **Telemetry:** none. There is no Wallfly server and no account.
 
-Where the data lives on the Mac: [macos/README.md](macos/README.md#privacy-on-the-mac).
+Where the data lives: [Mac](macos/README.md#privacy-on-the-mac) · [Windows](windows/README.md#data-and-privacy).
 
 > **Recording consent:** No bot joins or announces the recording. Tell participants and obtain their consent before recording.
 
 ## Local MCP access
 
-The Mac app includes a local MCP server (stdio) that lets compatible AI clients read your saved meetings. The tools are `search_meetings` (text, participant and ISO 8601 date-time filters; empty query lists meetings), `get_meeting` (notes, tasks and metadata), and `get_transcript` (speakers, relative seconds, provisional state and known gaps).
+Both apps include a local MCP server (stdio) that lets compatible AI clients read your saved meetings. The tools are `search_meetings` (text, participant and ISO 8601 date-time filters; empty query lists meetings), `get_meeting` (notes, tasks and metadata), and `get_transcript` (speakers, relative seconds, provisional state and known gaps).
 
 All saved meetings in the library are readable by a configured client. No audio or credentials are returned, and no files are modified or uploaded by this helper. Your AI client may send the retrieved text to its provider. The helper makes no additional AI requests. This is a local integration, with no cloud endpoint or background login service.
 
-Setup on the Mac: [macos/README.md](macos/README.md#local-mcp-access).
+Setup: [Mac](macos/README.md#local-mcp-access) · [Windows](windows/README.md#mcp-server).
 
 ## Contributing
 
