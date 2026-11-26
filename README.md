@@ -24,7 +24,7 @@ You choose the model, where it runs and what you spend. Transcription and note e
 
 | | Fully local | Your cloud provider |
 |---|---|---|
-| Transcription | Whisper Large V3 Turbo: on the Mac via [OpenWhispr](https://github.com/OpenWhispr/openwhispr), installed separately; on Windows included | Deepgram Nova-3 or OpenAI |
+| Transcription | Whisper Large V3 Turbo: on the Mac via [OpenWhispr](https://github.com/OpenWhispr/openwhispr), installed separately; on Windows the Whisper server is included, the model is downloaded separately | Deepgram Nova-3 or OpenAI |
 | Summaries and Enhanced Notes | Your local model through an OpenAI-compatible API | OpenAI, Anthropic (Claude), or another OpenAI-compatible API |
 | Processing | On your computer; works offline after setup and model downloads | Required audio or text goes to your chosen provider |
 | Cost | No API fees | Usage billed directly by your provider |
@@ -103,7 +103,7 @@ Install details, data folder and more Windows details: [windows/README.md](windo
   - Audio for transcription goes to Deepgram or OpenAI. With local Whisper, audio stays on your computer.
   - Your notes and the transcript go to the AI provider when you expand them. Turn this off, or use a local OpenAI-compatible server.
   - The speaker-recognition models are downloaded once from Hugging Face.
-- **Fully local:** local Whisper plus a local OpenAI-compatible server (or no AI notes) keeps meeting processing on your computer. On the Mac, install OpenWhispr separately and download the required models before working offline; on Windows, local Whisper and its models are included.
+- **Fully local:** local Whisper plus a local OpenAI-compatible server (or no AI notes) keeps meeting processing on your computer. On the Mac, install OpenWhispr separately and download the required models before working offline; on Windows, the Whisper server is included; download `ggml-large-v3-turbo.bin` separately and select it in Settings.
 - **Telemetry:** none. There is no Wallfly server and no account.
 
 Where the data lives: [Mac](macos/README.md#privacy-on-the-mac) · [Windows](windows/README.md#data-and-privacy).
