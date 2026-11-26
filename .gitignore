@@ -16,14 +16,14 @@ macos/.local-signing/
 /dist/
 
 # Windows build output (windows/, written by the Windows pipeline)
-bin/
-obj/
+windows/**/bin/
+windows/**/obj/
 windows/dist/
 windows/.tools/
 windows/.packages/
 windows/models/
 windows/whisper/
 windows/native/build/
-TestResults/
-.vs/
-*.user
+windows/**/TestResults/
+windows/**/.vs/
+windows/**/*.user
