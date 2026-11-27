@@ -10,7 +10,7 @@ Record, transcribe and summarize meetings with local models or your preferred cl
 [![Latest release](https://img.shields.io/github/v/release/Constipn/wallflyAI)](https://github.com/Constipn/wallflyAI/releases/latest)
 [![Platforms: macOS 26+ (Apple Silicon) · Windows 10/11 (x64, preview)](https://img.shields.io/badge/platforms-macOS%2026%2B%20%28Apple%20Silicon%29%20%C2%B7%20Windows%2010%2F11%20%28x64%2C%20preview%29-lightgrey)](#download)
 
-[**Download for Mac**](https://github.com/Constipn/wallflyAI/releases/latest/download/Wallfly.dmg) · <!-- windows-download --><a href="https://github.com/Constipn/wallflyAI/releases/download/windows-v0.1.1/Wallfly-Setup.exe" title="Wallfly for Windows 0.1.1. Not code-signed yet: if SmartScreen warns, click More info, then Run anyway."><b>Download for Windows</b></a><!-- /windows-download --> · [Report a bug](https://github.com/Constipn/wallflyAI/issues)
+[**Download for Mac**](https://github.com/Constipn/wallflyAI/releases/latest/download/Wallfly.dmg) · <!-- windows-download --><a href="https://github.com/Constipn/wallflyAI/releases/download/windows-latest/Wallfly-Setup.exe" title="Wallfly for Windows 0.1.1. Not code-signed yet: if SmartScreen warns, click More info, then Run anyway."><b>Download for Windows</b></a><!-- /windows-download --> · [Report a bug](https://github.com/Constipn/wallflyAI/issues)
 
 ![Wallfly demo](macos/assets/demo.gif)
 
@@ -82,7 +82,7 @@ Permissions, data folder and more Mac details: [macos/README.md](macos/README.md
 
 ### Windows
 
-<!-- windows-download --><a href="https://github.com/Constipn/wallflyAI/releases/download/windows-v0.1.1/Wallfly-Setup.exe" title="Wallfly for Windows 0.1.1. Not code-signed yet: if SmartScreen warns, click More info, then Run anyway."><b>Download for Windows</b></a><!-- /windows-download -->
+<!-- windows-download --><a href="https://github.com/Constipn/wallflyAI/releases/download/windows-latest/Wallfly-Setup.exe" title="Wallfly for Windows 0.1.1. Not code-signed yet: if SmartScreen warns, click More info, then Run anyway."><b>Download for Windows</b></a><!-- /windows-download -->
 
 Preview release. Requires Windows 10 version 1809 or newer, or Windows 11, 64-bit (x64).
 
