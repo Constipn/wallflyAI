@@ -1,5 +1,5 @@
 {
-  "$comment": "Wallfly Teams UI Automation selectors (shipped default). Sources: macOS Wallfly 1.13.0 (TeamsStructure.swift, TeamsSpeakerWatcher.swift; Teams for macOS 26261, AX DOM identifiers/classes). Override: %LOCALAPPDATA%\\Wallfly\\teams-selectors.json (hot-reloaded). Top-level keys replace these values; the sections properties/limits/speakingTexts/speakingGuard/selfMarkers/nameStrip/compactLayout merge key by key; a key ending in '+' appends to a list. Property names in matchers are logical (id/class/text/role) and resolved through 'properties'. Not yet verified in a live Windows Teams call.",
+  "$comment": "Wallfly Teams UI Automation selectors (shipped default). Sources: macOS Wallfly 1.13.0 and inspection of the Teams for Windows UI tree. Override: %LOCALAPPDATA%\\Wallfly\\teams-selectors.json (hot-reloaded). Top-level keys replace these values; the sections properties/limits/speakingTexts/speakingGuard/selfMarkers/nameStrip/compactLayout merge key by key; a key ending in '+' appends to a list. Property names in matchers are logical (id/class/text/role) and resolved through 'properties'. Not yet verified in a live Windows Teams call.",
   "schemaVersion": 1,
   "processNames": [ "ms-teams.exe" ],
   "webViewProcessNames": [ "msedgewebview2.exe" ],
@@ -28,7 +28,7 @@
     "traversal": "subtree"
   },
   "webAreaMarkers": [
-    { "controlTypes": [ "Document" ], "note": "Chromium exposes the web root as a Document (measured on Edge/Electron windows)." }
+    { "controlTypes": [ "Document" ], "note": "Chromium exposes the web root as a Document (measured on Chromium-based windows)." }
   ],
   "excludedControlTypes": [ "Edit" ],
   "excludedMarkers": [

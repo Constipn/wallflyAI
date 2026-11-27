@@ -14,8 +14,8 @@ public readonly record struct FusionAcousticSegment(int Speaker, double Start, d
 public sealed record FusionPolicy
 {
     /// <summary>
-    /// A word whose midpoint lies in no segment takes the segment nearest to its midpoint within this distance (the reference
-    /// value is 0.5 s; the macOS port used 0.3 s from the word's edges).
+    /// A word whose midpoint lies in no segment takes the segment nearest to its midpoint within this distance (Windows uses
+    /// the word midpoint within 0.5 s; macOS: 0.3 s from the word's edges).
     /// </summary>
     public double NearestSegmentTolerance { get; init; } = 0.5;
     /// <summary>A sandwiched acoustic run shorter than this is diarizer jitter.</summary>
@@ -28,9 +28,8 @@ public sealed record FusionPolicy
     /// </summary>
     public double MinIdentitySpeech { get; init; } = 10;
     /// <summary>
-    /// Phantom rule (10–30 s of speech, ≥ 20 runs, longest run ≤ 3 s and average speaker confidence &lt; 0.4):
-    /// identities below this speech time are checked for the jittery pattern. The acoustic pass gives no per-word
-    /// confidence, so the duration, run-count and longest-run conditions alone decide.
+    /// Phantom rule (10–30 s of speech, ≥ 20 runs, longest run ≤ 3 s):
+    /// identities below this speech time are checked for the jittery pattern.
     /// </summary>
     public double JitterSpeechCeiling { get; init; } = 30;
     /// <summary>A phantom (jittery) identity appears in at least this many separate runs.</summary>

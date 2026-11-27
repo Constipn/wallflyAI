@@ -38,8 +38,8 @@ public sealed record SherpaOnnxDiarizerOptions
     /// <summary>Check the SHA-256 of the models (once per process) before loading them.</summary>
     public bool VerifyModelHashes { get; init; } = true;
     /// <summary>
-    /// Scales the input like a slow AGC before diarizing: one gain per run that brings the 95th percentile of the
-    /// 20-ms frame RMS to <see cref="SherpaOnnxDiarizer.NormalizeTargetRms"/>, limited to 1–8 (quiet far-field speech on the
+    /// Normalises the input level before diarizing: one gain per run that scales the audio so that the 95th percentile of the
+    /// 20-ms frame RMS reaches <see cref="SherpaOnnxDiarizer.NormalizeTargetRms"/>, limited to 1–8 (quiet far-field speech on the
     /// microphone). Off by default: on the far-field meeting of 20.11. (p95 frame RMS 0.0048, gain 8) it did not give fewer
     /// or clearer voices (threshold 0.8: 28 clusters, 7 with ≥ 10 s, vs. 35 / 8 without) and pyannote normalises each
     /// window's waveform itself, so the gain mainly reshuffles the clusters.
@@ -166,7 +166,7 @@ public sealed class SherpaOnnxDiarizer(SherpaOnnxDiarizerOptions? options = null
         return await completion.Task.ConfigureAwait(false);
     }
 
-    /// <summary>The AGC target: the 95th-percentile frame RMS after scaling.</summary>
+    /// <summary>The input-normalisation target: the 95th-percentile frame RMS after scaling.</summary>
     public const double NormalizeTargetRms = 0.06;
     /// <summary>Gain limits of the input normalisation.</summary>
     public const double NormalizeMinGain = 1, NormalizeMaxGain = 8;

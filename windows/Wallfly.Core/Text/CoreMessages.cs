@@ -72,10 +72,11 @@ public static class CoreMessages
         $"{name} · Fallback ({(string.IsNullOrWhiteSpace(reason) ? MicrophoneUnavailable : reason)})";
     public const string SettingsSaveFailed = "Settings could not be saved. Check write permissions and free disk space.";
 
-    // Live audio diagnostics ("We're not receiving audio from …")
-    public const string OtherApps = "other apps";
-    /// <summary>The silent-meeting-audio warning; <paramref name="source"/> is <see cref="MeetingAudioTeams"/> or <see cref="OtherApps"/>.</summary>
-    public static string NotReceivingAudio(string source) => $"We're not receiving audio from {source}.";
+    // Live audio diagnostics ("No meeting audio from …")
+    /// <summary>The silent-meeting-audio warning for one named source, e.g. <see cref="MeetingAudioTeams"/>.</summary>
+    public static string NotReceivingAudio(string source) => $"No meeting audio from {source}. Check where it plays its sound.";
+    /// <summary>The silent-meeting-audio warning when the playing source is not Teams.</summary>
+    public const string NotReceivingAudioOtherApps = "No meeting audio from your call apps. Check where they play their sound.";
     public static string AudioChannelName(AudioSource source) => source switch
     {
         AudioSource.Me => "Microphone",

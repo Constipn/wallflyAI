@@ -141,7 +141,7 @@ public sealed partial class MeetingLibraryService
     public string TeamsSpeakerStatus { get => teamsSpeakerStatus; private set => Set(ref teamsSpeakerStatus, value); }
 
     /// <summary>
-    /// "We're not receiving audio from Microsoft Teams." / "… from other apps." (the silent-audio banner): Others stayed silent
+    /// "No meeting audio from Microsoft Teams. …" / "No meeting audio from your call apps. …" (the silent-audio banner): Others stayed silent
     /// while another app audibly plays, and the guard's switch / reopen did not help (or its attempts are used up). A Teams
     /// call alone never raises it. Cleared as soon as Others is audible again and when the recording ends; empty otherwise.
     /// </summary>
@@ -689,14 +689,14 @@ public sealed partial class MeetingLibraryService
         var tag = LogTag(session.MeetingId, session.SessionId);
         if (recording != session || !ReferenceEquals(recordingConfig, config) || version != renderFollowVersion)
         {
-            WallflyLog.Info($"Recording render follow {tag}: dropped a stale endpoint resolution (bound=\"{resolved.Bound}\"); " +
+            WallflyLog.Info($"Recording output follow {tag}: dropped a stale endpoint resolution (bound=\"{resolved.Bound}\"); " +
                 (recording != session ? "the recording ended" : "a newer device event or switch superseded it"));
             return;
         }
         Volatile.Write(ref recordingEndpoint, resolved.Bound);
         if (name is null && config.OthersMode == OthersMode.DeviceLoopback && RecordingAudioSelection is { Kind: MeetingAudioKind.DeviceLoopback } selection)
             RecordingAudioSelection = selection with { RenderDeviceId = config.RenderDeviceId, RenderDeviceName = resolved.Name ?? "" };
-        WallflyLog.Info($"Recording render follow {tag} fallback={fallback} othersMode={config.OthersMode} " +
+        WallflyLog.Info($"Recording output follow {tag} fallback={fallback} othersMode={config.OthersMode} " +
             $"configured=\"{pinned}\" -> \"{config.RenderDeviceId}\" bound=\"{resolved.Bound}\" name=\"{name ?? resolved.Name ?? ""}\"");
         if (change != null && change.DeviceId is null && resolved.Bound.Length > 0)
         {
@@ -1143,12 +1143,12 @@ public sealed partial class MeetingLibraryService
         return active.Count == 0 ? (true, evidence, "") : (false, evidence, $"Teams audio session active ({string.Join("/", active)})");
     }
 
-    // ---- silent meeting audio: the guard (render-follow and "We're not receiving audio from …") ----------------
+    // ---- silent meeting audio: the guard (output-device follow and "No meeting audio from …") ----------------
 
     private enum GuardAction { SwitchToDeviceLoopback, Retarget, Reopen, Warn }
 
     /// <summary>
-    /// The silent-meeting-audio guard of every recording (Windows; render-follow plus the "We're not receiving audio
+    /// The silent-meeting-audio guard of every recording (Windows; output-device follow plus the "No meeting audio
     /// from …" banner). Every <see cref="RecordingTimings.SilentOthersCheck"/> (3 s) it looks at the Others channel of the
     /// current engine. Only once that capture has run for <see cref="RecordingTimings.SilentOthersWindow"/> (30 s, since the
     /// start or the last switch) with less than <see cref="RecordingTimings.OthersAudibleMinimum"/> (1 s) of audible audio in
@@ -1280,7 +1280,7 @@ public sealed partial class MeetingLibraryService
                     {
                         warned = true;
                         var playingNow = activity!;
-                        var text = CoreMessages.NotReceivingAudio(playingNow.IsTeams ? CoreMessages.MeetingAudioTeams : CoreMessages.OtherApps);
+                        var text = (playingNow.IsTeams ? CoreMessages.NotReceivingAudio(CoreMessages.MeetingAudioTeams) : CoreMessages.NotReceivingAudioOtherApps);
                         var reason = string.Create(CultureInfo.InvariantCulture,
                             $"othersUnheard={unheard:0.0}s playing pid={playingNow.ProcessId} process={playingNow.ProcessName} peak={playingNow.Peak:0.0000} " +
                             $"endpoint=\"{playingNow.EndpointId}\" teams={playingNow.IsTeams} checks={unheardChecks} othersMode={config.OthersMode} render=\"{config.RenderDeviceId}\"");
@@ -1311,7 +1311,7 @@ public sealed partial class MeetingLibraryService
                 {
                     if (warned) continue;
                     warned = true;
-                    var text = CoreMessages.NotReceivingAudio(active.IsTeams ? CoreMessages.MeetingAudioTeams : CoreMessages.OtherApps);
+                    var text = (active.IsTeams ? CoreMessages.NotReceivingAudio(CoreMessages.MeetingAudioTeams) : CoreMessages.NotReceivingAudioOtherApps);
                     var reason = $"{playingDetail} othersMode={config.OthersMode} render=\"{config.RenderDeviceId}\"";
                     await dispatch(() => RaiseMeetingAudioWarning(session, tag, text, audible, window, reason)).ConfigureAwait(false);
                     continue;

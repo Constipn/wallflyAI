@@ -77,7 +77,7 @@ public sealed class RecordingViewModel : ObservableObject
     public bool ShowAudioNotice => AudioNotice.Length > 0;
 
     /// <summary>
-    /// "We're not receiving audio from Microsoft Teams." / "… other apps." while this meeting records and its meeting audio
+    /// "No meeting audio from Microsoft Teams. …" / "No meeting audio from your call apps. …" while this meeting records and its meeting audio
     /// stays silent although something plays (Core's <see cref="MeetingLibraryService.MeetingAudioWarning"/>); empty otherwise.
     /// </summary>
     public string MeetingAudioWarning => ShowStop ? app.Store.MeetingAudioWarning : "";

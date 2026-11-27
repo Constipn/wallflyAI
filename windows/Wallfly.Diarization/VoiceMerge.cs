@@ -10,9 +10,8 @@ public sealed record VoiceMergeOptions
 {
     /// <summary>
     /// Two clusters whose fingerprint centroids have at least this cosine similarity are one voice and are merged (repeatedly,
-    /// most similar pair first, centroids recomputed from the members' fingerprints). The reference split test asks for a centroid
-    /// distance of at least 0.25 (similarity 0.75, ReDimNet embeddings). Measured with ERes2Net on the far-field three-person
-    /// meeting of 20.11. (threshold-0.9 clusters, 4-s fingerprints): parts of one person 0.81–0.95, different people
+    /// most similar pair first, centroids recomputed from the members' fingerprints). Measured with ERes2Net on the far-field
+    /// three-person meeting of 20.11. (threshold-0.9 clusters, 4-s fingerprints): parts of one person 0.81–0.95, different people
     /// 0.22–0.46; 0.7 lies in the middle of that gap.
     /// </summary>
     public double MergeSimilarity { get; init; } = 0.7;
@@ -20,7 +19,7 @@ public sealed record VoiceMergeOptions
     public double MinVoiceSeconds { get; init; } = 10;
     /// <summary>
     /// … and at least this share of the channel's speech; smaller clusters join the most similar voice that qualifies.
-    /// The reference split test asks for 1 % of the fingerprints; the far-field meeting of 20.11. had two fragments of one remote
+    /// The far-field meeting of 20.11. had two fragments of one remote
     /// voice with 1.4 % and 1.9 % of the channel, so 3 % (37 s of its 20 min of speech, 1:48 min of an hour) keeps such
     /// fragments out while a real participant who speaks for 30 s in a short meeting still counts.
     /// </summary>

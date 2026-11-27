@@ -8,7 +8,7 @@ holds the native Windows app (WPF, C# / .NET 10) with its native audio core. The
 ## Download and install
 
 Installers are published on the GitHub Releases page of this repository, tagged `windows-v<version>`. Download
-`Wallfly-Setup-<version>.exe` and run it.
+`Wallfly-Setup.exe` from the release and run it.
 
 - The installer is per-user: it installs to `%LOCALAPPDATA%\Programs\Wallfly` and needs no administrator rights.
 - The installer is not code-signed yet, so Windows SmartScreen may warn on first run. Choose **More info**, then

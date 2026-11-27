@@ -90,7 +90,7 @@
           <controls:AudioMeter Level="{Binding Recording.OthersLevel}" ToolTip="{x:Static app:Strings.MeterMeetingAudio}" AutomationProperties.Name="{Binding Recording.OthersLevelName}" />
         </StackPanel>
       </StackPanel>
-      <!-- Silent-audio banner: the meeting audio stays silent while something plays ("We're not receiving audio from …"). -->
+      <!-- Silent-audio banner: the meeting audio stays silent while something plays ("No meeting audio from …"). -->
       <StackPanel x:Name="MeetingAudioWarning" DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0"
                   Visibility="{Binding Recording.ShowMeetingAudioWarning, Converter={StaticResource VisibleWhen}}" ToolTip="{Binding Recording.MeetingAudioWarningHint}">
         <controls:Icon Kind="Info" Size="12" Foreground="{StaticResource Accent}" Margin="0,0,6,0" VerticalAlignment="Center" />

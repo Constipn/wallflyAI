@@ -8,7 +8,7 @@ public sealed record TeamsAttributionPolicy
 {
     /// <summary>macOS: the Teams speaking indicator is backdated by 0.5 s (not calibrated).</summary>
     public const double MacDetectionLag = 0.5;
-    /// <summary>Windows start value: 900 ms for Teams on Windows; verify in a live call.</summary>
+    /// <summary>Windows start value, uncalibrated; verify in a live call.</summary>
     public const double WindowsTeamsDetectionLag = 0.9;
 
     /// <summary>The policy for Teams on Windows (detection lag 0.9 s, everything else as on macOS).</summary>
